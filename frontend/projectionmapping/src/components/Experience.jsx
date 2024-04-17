@@ -35,7 +35,8 @@ export const Experience = () => {
             <OrbitControls enabled={true}/>
 
             {/* position param: [x, y, z] */}
-            <Avatar position={[0, -2, 1]} scale={2}/>
+            {/* to apply rotation add arg: rotation={[0, Math.PI / 2, 0]} */}
+            <Avatar position={[0, -2, 1]} scale={2} />
 
             <Environment preset="sunset"/>
 

@@ -23,8 +23,9 @@ const corresponding = {
     X: "viseme_PP",
 };
 
-// avatar component defn
 export function Avatar(props) {
+
+    const [pose, setPose] = useState("t-pose (default)");
 
     // state vars and controls
     const {
@@ -33,6 +34,7 @@ export function Avatar(props) {
         headFollow,
         smoothMorphTarget,
         morphTargetSmoothing,
+        avatarpose,
     } = useControls({
         playAudio: false,
         headFollow: true,
@@ -42,6 +44,11 @@ export function Avatar(props) {
             value: "welcome",
             options: ["welcome", "pizzas"],
         },
+        avatarpose: {
+            value: pose, // Use 'pose' from state
+            onChange: (value) => setPose(value), // Update 'pose' state
+            options: ["t-pose (default)", "sit"]
+        }
     });
 
     // load audio and lipsync data based on script
@@ -52,10 +59,6 @@ export function Avatar(props) {
     //
     useFrame(() => {
         const currentAudioTime = audio.currentTime;
-        // if (audio.paused || audio.ended) {
-        //   setAnimation("Idle");
-        //   return;
-        // }
 
         Object.values(corresponding).forEach((value) => {
             // Set morph targets to 0 if smoothing is disabled
@@ -150,83 +153,92 @@ export function Avatar(props) {
             ] = 1;
         if (playAudio) {
             audio.play();
-            // if (script === "welcome") {
-            //   setAnimation("Greeting");
-            // } else {
-            //   setAnimation("Angry");
-            // }
         } else {
-            // setAnimation("Idle");
             audio.pause();
         }
     }, [playAudio, script]);
 
     // load avatar model and animations
     const {nodes, materials} = useGLTF("models/646d9dcdc8a5f5bddbfac913.glb");
-    // const { animations: idleAnimation } = useFBX("/animations/Idle.fbx");
-    // const { animations: angryAnimation } = useFBX(
-    //   "/animations/Angry Gesture.fbx"
-    // );
-    // const { animations: greetingAnimation } = useFBX(
-    //   "/animations/Standing Greeting.fbx"
-    // );
 
-
-    // set animation names
-    // idleAnimation[0].name = "Idle";
-    // angryAnimation[0].name = "Angry";
-    // greetingAnimation[0].name = "Greeting";
-
-    // define animation state and actions
-    // const [animation, setAnimation] = useState("Idle");
     const group = useRef();
-    // const { actions } = useAnimations(
-    //   [idleAnimation[0], angryAnimation[0], greetingAnimation[0]],
-    //   group
-    // );
 
-    // useEffect(() => {
-    //   actions[animation].reset().fadeIn(0.5).play();
-    //   return () => actions[animation].fadeOut(0.5);
-    // }, [animation]);
-
-    // head follow
+    // head follow toggle
     useFrame((state) => {
         if (headFollow) {
             group.current.getObjectByName("Head").lookAt(state.camera.position);
         }
     });
 
+    // t-pose (default)
+    // reset avatar to default pose
+    // need to update with each added pose to reset rotations
+    useEffect(() => {
+        const leftThigh = group.current.getObjectByName("LeftUpLeg");
+        const rightThigh = group.current.getObjectByName("RightUpLeg");
+        const leftlowerleg = group.current.getObjectByName("LeftLeg");
+        const rightlowerleg = group.current.getObjectByName("RightLeg");
+        if (pose === "t-pose (default)") {
+            group.current.getObjectByName("LeftUpLeg").rotation.set(Math.PI, Math.PI, 0);
+            group.current.getObjectByName("RightUpLeg").rotation.set(Math.PI, Math.PI, 0);
+            group.current.getObjectByName("LeftLeg").rotation.set(0, 0, 0);
+            group.current.getObjectByName("RightLeg").rotation.set(0, 0, 0);
+        }
+    }, [pose]);
+
     // RightFoot
-    useEffect(() => {
-        const RF = group.current.getObjectByName("RightFoot");
-        if (RF) {
-            const targetRotation = new THREE.Quaternion();
-            targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
-            RF.quaternion.copy(targetRotation);
-        }
-        console.log(nodes);
-    }, []);
+    // default quaternion is approx: x = 1, angle = 1 rad
+    // useEffect(() => {
+    //
+    //     const targetRotation = new THREE.Quaternion();
+    //     targetRotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1);
+    //     group.current.getObjectByName("RightFoot").quaternion.copy(targetRotation);
+    //
+    //     console.log(nodes);
+    //
+    //
+    // }, []);
 
-    // RightArm
+    // sit
     useEffect(() => {
-        const RA = group.current.getObjectByName("RightArm");
-        if (RA) {
-            const targetRotation = new THREE.Quaternion();
-            targetRotation.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 4);
-            RA.quaternion.copy(targetRotation);
-        }
-    }, []);
+        const torso = group.current.getObjectByName("Spine");
+        const leftThigh = group.current.getObjectByName("LeftUpLeg");
+        const rightThigh = group.current.getObjectByName("RightUpLeg");
+        const leftlowerleg = group.current.getObjectByName("LeftLeg");
+        const rightlowerleg = group.current.getObjectByName("RightLeg");
+        if (pose === "sit") {
 
-    // LeftArm
-    useEffect(() => {
-        const leftArm = group.current.getObjectByName("LeftArm");
-        if (leftArm) {
-            const targetRotation = new THREE.Quaternion();
-            targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), 1);
-            leftArm.quaternion.copy(targetRotation);
+            // torso.position.y -= 1;
+
+            const thighbendangle = Math.PI / 2;
+            group.current.getObjectByName("LeftUpLeg").rotation.x = thighbendangle;
+            group.current.getObjectByName("RightUpLeg").rotation.x = thighbendangle;
+            const kneebendangle = -Math.PI / 2;
+            group.current.getObjectByName("LeftLeg").rotation.x = kneebendangle;
+            group.current.getObjectByName("RightLeg").rotation.x = kneebendangle;
         }
-    }, []);
+
+    }, [pose]);
+
+    // // RightArm
+    // useEffect(() => {
+    //     const RA = group.current.getObjectByName("RightArm");
+    //     if (RA) {
+    //         const targetRotation = new THREE.Quaternion();
+    //         targetRotation.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 4);
+    //         RA.quaternion.copy(targetRotation);
+    //     }
+    // }, []);
+    //
+    // // LeftArm
+    // useEffect(() => {
+    //     const leftArm = group.current.getObjectByName("LeftArm");
+    //     if (leftArm) {
+    //         const targetRotation = new THREE.Quaternion();
+    //         targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), 1);
+    //         leftArm.quaternion.copy(targetRotation);
+    //     }
+    // }, []);
 
     return (
         <group {...props} dispose={null} ref={group}>
