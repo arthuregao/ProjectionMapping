@@ -1,9 +1,9 @@
-.font-style {
-    color: #999999;
+.selection-tab-btn {
+    color: #cbcbcb;
 }
 
-.font-style:hover {
-    background-color: #EFEFEF;
+.selection-tab-btn:hover {
+    background-color: #3f3f3f;
     border-radius: 4px;
 }
 
@@ -13,13 +13,17 @@
 
 .active {
     color: #ffffff;
+    background-color: #FF5733;
+    border-radius: 4px;
     border-bottom: 1px solid #000000;
 }
 
 .add-btn {
     width: 154px;
     height: 154px;
-    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='black' stroke-width='2' stroke-dasharray='8%2c 10' stroke-dashoffset='0' stroke-linecap='round'/%3e%3c/svg%3e");}
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='white' stroke-width='2' stroke-dasharray='8%2c 10' stroke-dashoffset='0' stroke-linecap='round'/%3e%3c/svg%3e");
+    line-height: 154px;
+}
 
 h1 {
     font-size: 2.5rem;

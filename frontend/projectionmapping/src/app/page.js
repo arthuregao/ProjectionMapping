@@ -1,32 +1,7 @@
 "use client";
-// <<<<<<< HEAD
-import Link from "next/link";
+
 import { useRouter } from 'next/navigation'
 import React from "react";
-//
-// export default function Home() {
-//
-//     return (
-//         <div style={{
-//             display: 'flex',
-//             justifyContent: 'center',
-//             alignItems: 'center',
-//             height: '100vh',
-//             flexDirection: 'column'
-//         }}>
-//             <h1>Welcome to the Homepage</h1>
-//             <p>Click below to go to the Avatar Creator page:</p>
-//             <Link href="/create-avatar">
-//                 Create Avatar
-//             </Link>
-//             <Link href="/about">
-//                 about
-//             </Link>
-//         </div>
-//
-//     );
-// =======
-
 import "./style.css";
 import {useState} from "react";
 
@@ -60,7 +35,7 @@ export default function Home() {
             {tabList.map((name, i) =>
                 <button
                     key={i}
-                    className={activeTab === i ? "active px-3 py-1 font-style" : "px-3 py-1 font-style"}
+                    className={activeTab === i ? "active px-3 py-1" : "px-3 py-1 selection-tab-btn"}
                     onClick={() => setActiveTab(i)}
                 >
                     {name}
@@ -69,12 +44,14 @@ export default function Home() {
         </div>
         <hr className="horizontal-line"/>
         <button
-            className="add-btn mt-10"
+            className="add-btn mt-10 font-light text-4xl"
             type="submit"
             onClick={() => {
                 handleAdd();
             }}
-        ></button>
+        >
+            +
+        </button>
     </main>
   );
 }
