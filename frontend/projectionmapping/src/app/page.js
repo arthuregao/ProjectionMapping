@@ -1,18 +1,39 @@
 "use client";
 
 import {useRouter} from 'next/navigation'
-import React from "react";
+import React, {useEffect, useState} from "react";
+
 import "./style.css";
-import {useState} from "react";
+import AvatarDisplay from "./components/AvatarDisplay"
 
 export default function Home() {
 
     const router = useRouter()
 
     const [activeTab, setActiveTab] = useState(0);
-    const [avatar, setAvatar] = useState("");
+    const [currentSession, setCurrentSession] = useState({});
     const tabList = ["Avatars", "Images", "Text", "Audio"]
 
+    useEffect(() => {
+        // Fetching assets from the server
+        console.log("fetching...")
+        const fetchCurrentAssets = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/get-session');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch assets');
+                }
+                const data = await response.json();
+                console.log(data)
+                setCurrentSession(data);
+            } catch (error) {
+                console.error('Error fetching assets:', error);
+                // Handle error accordingly
+            }
+        };
+
+        fetchCurrentAssets().then(r => {});
+    }, []);
 
     function handleAdd() {
         if (activeTab === 0) {
@@ -23,6 +44,36 @@ export default function Home() {
             // TODO: implement "add text" page
         } else {
             // TODO: implement "upload sound" page
+        }
+    }
+
+    function renderTabContent() {
+        switch (activeTab) {
+            case 0:
+
+                if (currentSession['avatars']) {
+                    console.log(Object.entries(currentSession['avatars']))
+                    console.log('attempting to display avatars')
+                    return (
+                        <div>Create or select avatars.
+                            {Object.entries(currentSession['avatars']).map(([key, value], index) =>
+                                <AvatarDisplay name={key} key={index}></AvatarDisplay>
+                            )}
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div>Create or select avatars.</div>
+                    )
+                }
+            case 1:
+                return <div>Upload images here.</div>;
+            case 2:
+                return <div>Add text content.</div>;
+            case 3:
+                return <div>Upload sounds.</div>;
+            default:
+                return <div>Select a category to add content.</div>;
         }
     }
 
@@ -43,7 +94,9 @@ export default function Home() {
                 )}
             </div>
             <hr className="horizontal-line"/>
-            
+
+            {/*render the correct component based on tab*/}
+            {renderTabContent()}
 
             <button
                 className="add-btn mt-10 font-light text-4xl"

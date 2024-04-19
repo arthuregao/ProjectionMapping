@@ -41,13 +41,14 @@ function AvatarCreatorComponent() {
     .then(response => response.json())
     .then(data => {
       console.log('Server response:', data);
+      router.push('/')
     })
     .catch(error => {
       console.error('Error sending URL to the server:', error);
     });
 
     setAvatarUrl(avatarUrlWithParams);
-    router.push('/')
+
   };
 
   const handleUserAuthorized = (event) => {

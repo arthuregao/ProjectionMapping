@@ -112,6 +112,23 @@ def upload():
     return jsonify({"message": "Invalid request"}), 400
 
 
+@app.route('/get-session', methods=['GET'])
+@cross_origin()
+def get_session_asset_names():
+    try:
+        # Open the session.json file in read mode
+        with open('session/session.json', 'r') as file:
+            data = json.load(file)
+            # Return the JSON data
+            return jsonify(data)
+    except FileNotFoundError:
+        # Return an error message if the file is not found
+        return jsonify({"error": "File not found"}), 404
+    except Exception as e:
+        # Return a generic error message for any other exceptions
+        return jsonify({"error": "An error occurred", "message": str(e)}), 500
+
+
 @app.route('/attach-audio', methods=['POST'])
 def attach_audio():
     # TODO implement
@@ -119,6 +136,4 @@ def attach_audio():
 
 
 if __name__ == '__main__':
-    app = create_app()
-
     app.run(debug=True)
