@@ -25,8 +25,6 @@ const corresponding = {
 
 export function Avatar(props) {
 
-    const [pose, setPose] = useState("t-pose (default)");
-
     // state vars and controls
     const {
         playAudio,
@@ -34,7 +32,6 @@ export function Avatar(props) {
         headFollow,
         smoothMorphTarget,
         morphTargetSmoothing,
-        avatarpose,
     } = useControls({
         playAudio: false,
         headFollow: true,
@@ -44,11 +41,7 @@ export function Avatar(props) {
             value: "welcome",
             options: ["welcome", "pizzas"],
         },
-        avatarpose: {
-            value: pose, // Use 'pose' from state
-            onChange: (value) => setPose(value), // Update 'pose' state
-            options: ["t-pose (default)", "sit"]
-        }
+
     });
 
     // load audio and lipsync data based on script
@@ -159,7 +152,7 @@ export function Avatar(props) {
     }, [playAudio, script]);
 
     // load avatar model and animations
-    const {nodes, materials} = useGLTF("models/646d9dcdc8a5f5bddbfac913.glb");
+    const {nodes, materials} = useGLTF(props.modelGLTF);
 
     const group = useRef();
 
@@ -174,42 +167,17 @@ export function Avatar(props) {
     // reset avatar to default pose
     // need to update with each added pose to reset rotations
     useEffect(() => {
-        const leftThigh = group.current.getObjectByName("LeftUpLeg");
-        const rightThigh = group.current.getObjectByName("RightUpLeg");
-        const leftlowerleg = group.current.getObjectByName("LeftLeg");
-        const rightlowerleg = group.current.getObjectByName("RightLeg");
-        if (pose === "t-pose (default)") {
+        if (props.pose === "t-pose (default)") {
             group.current.getObjectByName("LeftUpLeg").rotation.set(Math.PI, Math.PI, 0);
             group.current.getObjectByName("RightUpLeg").rotation.set(Math.PI, Math.PI, 0);
             group.current.getObjectByName("LeftLeg").rotation.set(0, 0, 0);
             group.current.getObjectByName("RightLeg").rotation.set(0, 0, 0);
         }
-    }, [pose]);
-
-    // RightFoot
-    // default quaternion is approx: x = 1, angle = 1 rad
-    // useEffect(() => {
-    //
-    //     const targetRotation = new THREE.Quaternion();
-    //     targetRotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1);
-    //     group.current.getObjectByName("RightFoot").quaternion.copy(targetRotation);
-    //
-    //     console.log(nodes);
-    //
-    //
-    // }, []);
+    }, [props.pose]);
 
     // sit
     useEffect(() => {
-        const torso = group.current.getObjectByName("Spine");
-        const leftThigh = group.current.getObjectByName("LeftUpLeg");
-        const rightThigh = group.current.getObjectByName("RightUpLeg");
-        const leftlowerleg = group.current.getObjectByName("LeftLeg");
-        const rightlowerleg = group.current.getObjectByName("RightLeg");
-        if (pose === "sit") {
-
-            // torso.position.y -= 1;
-
+        if (props.pose === "sit") {
             const thighbendangle = Math.PI / 2;
             group.current.getObjectByName("LeftUpLeg").rotation.x = thighbendangle;
             group.current.getObjectByName("RightUpLeg").rotation.x = thighbendangle;
@@ -218,27 +186,8 @@ export function Avatar(props) {
             group.current.getObjectByName("RightLeg").rotation.x = kneebendangle;
         }
 
-    }, [pose]);
+    }, [props.pose]);
 
-    // // RightArm
-    // useEffect(() => {
-    //     const RA = group.current.getObjectByName("RightArm");
-    //     if (RA) {
-    //         const targetRotation = new THREE.Quaternion();
-    //         targetRotation.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 4);
-    //         RA.quaternion.copy(targetRotation);
-    //     }
-    // }, []);
-    //
-    // // LeftArm
-    // useEffect(() => {
-    //     const leftArm = group.current.getObjectByName("LeftArm");
-    //     if (leftArm) {
-    //         const targetRotation = new THREE.Quaternion();
-    //         targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), 1);
-    //         leftArm.quaternion.copy(targetRotation);
-    //     }
-    // }, []);
 
     return (
         <group {...props} dispose={null} ref={group}>

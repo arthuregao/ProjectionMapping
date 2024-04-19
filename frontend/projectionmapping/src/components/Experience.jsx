@@ -3,7 +3,7 @@
 import {Environment, Html, OrbitControls, useVideoTexture} from "@react-three/drei";
 import {Avatar} from "./Avatar";
 import Background from "./Background.jsx";
-import React, {Suspense, useEffect} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import Sprite from "./sprite.jsx";
 import {useControls} from "leva";
 import {useLoader} from "@react-three/fiber";
@@ -16,7 +16,17 @@ export const Experience = () => {
     const {homerheight: initialHeight} = JSON.parse(localStorage.getItem('levaState')) || {homerheight: 1};
 
     // leva UI controls
-    const {homerheight} = useControls({homerheight: initialHeight});
+    const {
+        homerHeight,
+        avatarPose,
+
+    } = useControls({
+        homerHeight: initialHeight,
+        avatarPose: {
+            value: "t-pose (default)",
+            options: ["t-pose (default)", "sit"]
+        }
+    });
 
     // // update local storage whenever Leva control changes
     // useEffect(() => {
@@ -36,7 +46,15 @@ export const Experience = () => {
 
             {/* position param: [x, y, z] */}
             {/* to apply rotation add arg: rotation={[0, Math.PI / 2, 0]} */}
-            <Avatar position={[0, -2, 1]} scale={2} />
+            <Avatar
+                position={[0, -2, 1]}
+                scale={2}
+                modelGLTF="models/646d9dcdc8a5f5bddbfac913.glb"
+                pose={avatarPose}
+            />
+
+            {/*<Avatar position={[-2, -2, 1]} scale={2} modelGLTF="models/harriet.glb"/>*/}
+
 
             <Environment preset="sunset"/>
 
@@ -49,7 +67,7 @@ export const Experience = () => {
 
             <Suspense fallback={null}>
 
-                <Sprite IconPosition={[-2, 0, 0.1]} IconSize={[3, homerheight, 0]}
+                <Sprite IconPosition={[-2, 0, 0.1]} IconSize={[3, homerHeight, 0]}
                         textureSrc="textures/homersprite.png"
                         SpriteDimensions={[4, 4, 10]}/>
 
