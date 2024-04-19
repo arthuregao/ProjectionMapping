@@ -1,13 +1,20 @@
 import os
 import shutil
 
+import json
+
 from datetime import datetime
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests
 
-app = Flask(__name__)
+BASE_SESSION_STRUCTURE = {
+    'audio': [],
+    'avatars': {},
+    'images': [],
+    'text': []
+}
 
 
 def clear_folder_contents(folder_path):
@@ -23,6 +30,30 @@ def clear_folder_contents(folder_path):
                 clear_folder_contents(file_path)
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
+
+    with open('session/session.json', 'w') as session_json:
+        json.dump(BASE_SESSION_STRUCTURE, session_json)
+
+
+def create_directory_structure(base_path='session'):
+    print("i am running")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path, exist_ok=True)
+
+    directories = ['audio', 'avatars', 'images']
+    for directory in directories:
+        path = os.path.join(base_path, directory)
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+
+    with open('session/session.json', 'w') as session_json:
+        json.dump(BASE_SESSION_STRUCTURE, session_json)
+
+
+app = Flask(__name__)
+
+with app.app_context():
+    create_directory_structure()
 
 
 @app.route('/reset')
@@ -57,9 +88,22 @@ def upload():
                 now = datetime.now()
                 time_string = now.strftime('%y%m%d-%H-%M-%S')
 
+                avatar_name = f'avatar-{time_string}.glb'
+
                 # You might want to save the file or process it as needed
-                with open(f'session/avatars/avatar-{time_string}.glb', 'wb') as f:
+                with open(f'session/avatars/{avatar_name}', 'wb') as f:
                     f.write(response.content)
+
+                with open('session/session.json', 'r') as session_json:
+                    current_session = json.load(session_json)
+
+                current_session['avatars'][avatar_name] = {
+                    'audio': None
+                }
+
+                with open('session/session.json', 'w') as session_json:
+                    json.dump(current_session, session_json)
+
                 return jsonify({"message": "File downloaded successfully"}), 200
             else:
                 return jsonify({"message": "Failed to fetch file"}), 400
@@ -75,4 +119,6 @@ def attach_audio():
 
 
 if __name__ == '__main__':
+    app = create_app()
+
     app.run(debug=True)
