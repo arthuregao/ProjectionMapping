@@ -1,6 +1,7 @@
 "use client";
 // <<<<<<< HEAD
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
 import React from "react";
 //
 // export default function Home() {
@@ -30,6 +31,9 @@ import "./style.css";
 import {useState} from "react";
 
 export default function Home() {
+
+    const router = useRouter()
+
     const [activeTab, setActiveTab] = useState(0);
     const [avatar, setAvatar] = useState("");
     const tabList = ["Avatars", "Images", "Text", "Audio"]
@@ -37,7 +41,7 @@ export default function Home() {
 
     function handleAdd() {
         if (activeTab === 0) {
-
+            router.push('/create-avatar')
         } else if (activeTab === 1) {
 
         } else if (activeTab === 2) {

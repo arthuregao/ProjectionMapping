@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { AvatarCreator } from "@readyplayerme/react-avatar-creator";
-
-import Head from 'next/head';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation'
 
 
 const config = {
@@ -17,6 +15,8 @@ const config = {
 const style = { width: "100%", height: "100vh", border: "none", margi: 0 };
 
 function AvatarCreatorComponent() {
+  const router = useRouter();
+
   const [avatarUrl, setAvatarUrl] = useState("");
 
   useEffect(() => {
@@ -47,6 +47,7 @@ function AvatarCreatorComponent() {
     });
 
     setAvatarUrl(avatarUrlWithParams);
+    router.push('/')
   };
 
   const handleUserAuthorized = (event) => {
