@@ -168,22 +168,44 @@ export function Avatar(props) {
     // need to update with each added pose to reset rotations
     useEffect(() => {
         if (props.pose === "t-pose (default)") {
+
+            // legs
             group.current.getObjectByName("LeftUpLeg").rotation.set(Math.PI, Math.PI, 0);
             group.current.getObjectByName("RightUpLeg").rotation.set(Math.PI, Math.PI, 0);
             group.current.getObjectByName("LeftLeg").rotation.set(0, 0, 0);
             group.current.getObjectByName("RightLeg").rotation.set(0, 0, 0);
+
+            // arms
+            const targetRotationLeft = new THREE.Quaternion();
+            targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4);
+            group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
+            const targetRotationRight = new THREE.Quaternion();
+            targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4);
+            group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
+
+            console.log(nodes);
         }
     }, [props.pose]);
 
     // sit
     useEffect(() => {
         if (props.pose === "sit") {
+
+            // bend legs
             const thighbendangle = Math.PI / 2;
             group.current.getObjectByName("LeftUpLeg").rotation.x = thighbendangle;
             group.current.getObjectByName("RightUpLeg").rotation.x = thighbendangle;
             const kneebendangle = -Math.PI / 2;
             group.current.getObjectByName("LeftLeg").rotation.x = kneebendangle;
             group.current.getObjectByName("RightLeg").rotation.x = kneebendangle;
+
+            // lower arms to their sides
+            const targetRotationLeft = new THREE.Quaternion();
+            targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
+            group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
+            const targetRotationRight = new THREE.Quaternion();
+            targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
+            group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
         }
 
     }, [props.pose]);
