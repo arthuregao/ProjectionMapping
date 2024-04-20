@@ -1,7 +1,6 @@
 'use client'
 
 import {useRouter} from 'next/navigation';
-import Link from 'next/link'
 import React, {useEffect, useState} from 'react';
 
 export default function AudioUpload({avatars}) {

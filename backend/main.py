@@ -252,5 +252,39 @@ def allowed_audio_file(filename):
         filename.rsplit('.', 1)[1].lower() in {'mp3', 'wav', 'ogg'}
 
 
+# Function to sanitize the input text
+def sanitize_text(text):
+    # Replace with your desired sanitization logic. A simple example:
+    import html
+    return html.escape(text)
+
+
+@app.route('/upload-text', methods=['POST'])
+@cross_origin()
+def upload_text():
+    if 'text' not in request.form:
+        return jsonify({'error': 'No text data provided'}), 400
+
+    text = request.form['text']
+    sanitized_text = sanitize_text(text)
+
+    # Load session data (create file if it doesn't exist)
+    session_file = 'session/session.json'
+    try:
+        with open(session_file, 'r') as f:
+            session_data = json.load(f)
+    except FileNotFoundError:
+        session_data = {'text': []}  # Initialize
+
+    # Update session data
+    session_data['text'].append(sanitized_text)
+
+    # Save updated session data
+    with open(session_file, 'w') as f:
+        json.dump(session_data, f)
+
+    return jsonify({'message': 'Text uploaded and stored successfully'}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)

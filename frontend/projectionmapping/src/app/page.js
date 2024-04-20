@@ -7,6 +7,7 @@ import "./style.css";
 import AvatarDisplay from "./components/AvatarDisplay"
 import ImageDisplay from "./components/ImageDisplay"
 import AudioDisplay from "./components/AudioDisplay"
+import TextDisplay from "./components/TextDisplay"
 
 export default function Home() {
 
@@ -44,7 +45,7 @@ export default function Home() {
         } else if (activeTab === 1) {
             router.push('/upload/image')
         } else if (activeTab === 2) {
-            // TODO: implement "upload text" page
+            router.push('/upload/text')
         } else {
             router.push('/upload/audio')
         }
@@ -87,7 +88,22 @@ export default function Home() {
                 }
 
             case 2:
+
+                if (currentSession['text']) {
+                    console.log('attempting to display text')
+                    return (
+                        <div>
+                            Add text content.
+
+                            {currentSession['text'].map((value, index) =>
+                                <TextDisplay name={value} key={index}/>
+                            )}
+                        </div>
+                    )
+                } else {
+
                 return <div>Add text content.</div>;
+                }
             case 3:
 
                 if (currentSession['audio']) {
