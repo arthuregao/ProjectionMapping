@@ -1,8 +1,5 @@
 import os
-import shutil
-
 import json
-
 from datetime import datetime
 
 from flask import Flask, request, jsonify
@@ -110,6 +107,12 @@ def upload():
         else:
             return jsonify({"message": "No URL provided"}), 400
     return jsonify({"message": "Invalid request"}), 400
+
+
+@app.route('/upload-image', methods=['POST'])
+@cross_origin()
+def upload_image_assets():
+    pass
 
 
 @app.route('/get-session', methods=['GET'])
