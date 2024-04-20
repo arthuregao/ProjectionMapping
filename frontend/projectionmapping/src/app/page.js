@@ -6,6 +6,7 @@ import React, {useEffect, useState} from "react";
 import "./style.css";
 import AvatarDisplay from "./components/AvatarDisplay"
 import ImageDisplay from "./components/ImageDisplay"
+import AudioDisplay from "./components/AudioDisplay"
 
 export default function Home() {
 
@@ -43,9 +44,9 @@ export default function Home() {
         } else if (activeTab === 1) {
             router.push('/upload/image')
         } else if (activeTab === 2) {
-            // TODO: implement "add text" page
+            // TODO: implement "upload text" page
         } else {
-            // TODO: implement "upload sound" page
+            router.push('/upload/audio')
         }
     }
 
@@ -88,7 +89,22 @@ export default function Home() {
             case 2:
                 return <div>Add text content.</div>;
             case 3:
-                return <div>Upload sounds.</div>;
+
+                if (currentSession['audio']) {
+                    console.log('attempting to display audio')
+                    return (
+                        <div>
+                            Upload Audio here.
+
+                            {currentSession['audio'].map((value, index) =>
+                                <AudioDisplay name={value} key={index}></AudioDisplay>
+                            )}
+                        </div>
+                    );
+                } else {
+                    return <div>Upload Audio here.</div>;
+                }
+
             default:
                 return <div>Select a category to add content.</div>;
         }
