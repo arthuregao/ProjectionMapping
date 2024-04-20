@@ -2,8 +2,9 @@ import os
 import json
 from datetime import datetime
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS, cross_origin
+from werkzeug.utils import secure_filename
 import requests
 
 BASE_SESSION_STRUCTURE = {
@@ -43,11 +44,12 @@ def create_directory_structure(base_path='session'):
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
 
-    with open('session/session.json', 'w') as session_json:
-        json.dump(BASE_SESSION_STRUCTURE, session_json)
+    # with open('session/session.json', 'w') as session_json:
+    #     json.dump(BASE_SESSION_STRUCTURE, session_json)
 
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 with app.app_context():
     create_directory_structure()
@@ -112,7 +114,42 @@ def upload():
 @app.route('/upload-image', methods=['POST'])
 @cross_origin()
 def upload_image_assets():
-    pass
+    if 'file' not in request.files:
+        return jsonify({"message": "No file part"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"message": "No selected file"}), 400
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        now = datetime.now()
+        time_string = now.strftime('%y%m%d-%H-%M-%S')
+        image_name = f'image-{time_string}-{filename}'
+        file_path = os.path.join('session/images', image_name)
+        file.save(file_path)
+
+        try:
+            with open('session/session.json', 'r+') as session_json:
+                current_session = json.load(session_json)
+                current_session['images'].append(image_name)
+                session_json.seek(0)
+                json.dump(current_session, session_json)
+                session_json.truncate()
+        except Exception as e:
+            return jsonify({"message": "Failed to update session file", "error": str(e)}), 500
+
+        return jsonify({"message": "File uploaded and session updated successfully"}), 200
+    return jsonify({"message": "Invalid file or request"}), 400
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+
+@app.route('/images/<filename>')
+@cross_origin()
+def uploaded_file(filename):
+    return send_from_directory('session/images', filename)
 
 
 @app.route('/get-session', methods=['GET'])

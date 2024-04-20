@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 
 import "./style.css";
 import AvatarDisplay from "./components/AvatarDisplay"
+import ImageDisplay from "./components/ImageDisplay"
 
 export default function Home() {
 
@@ -32,14 +33,15 @@ export default function Home() {
             }
         };
 
-        fetchCurrentAssets().then(r => {});
+        fetchCurrentAssets().then(r => {
+        });
     }, []);
 
     function handleAdd() {
         if (activeTab === 0) {
-            router.push('/create-avatar')
+            router.push('/upload/create-avatar')
         } else if (activeTab === 1) {
-            // TODO: implement "upload image" page
+            router.push('/upload/image')
         } else if (activeTab === 2) {
             // TODO: implement "add text" page
         } else {
@@ -52,8 +54,8 @@ export default function Home() {
             case 0:
 
                 if (currentSession['avatars']) {
-                    console.log(Object.entries(currentSession['avatars']))
-                    console.log('attempting to display avatars')
+                    // console.log(Object.entries(currentSession['avatars']))
+                    // console.log('attempting to display avatars')
                     return (
                         <div>Create or select avatars.
                             {Object.entries(currentSession['avatars']).map(([key, value], index) =>
@@ -67,7 +69,22 @@ export default function Home() {
                     )
                 }
             case 1:
-                return <div>Upload images here.</div>;
+
+                if (currentSession['images']) {
+                    console.log('attempting to display images')
+                    return (
+                        <div>
+                            Upload images here.
+
+                            {currentSession['images'].map((value, index) =>
+                                <ImageDisplay name={value} key={index}></ImageDisplay>
+                            )}
+                        </div>
+                    );
+                } else {
+                    return <div>Upload images here.</div>;
+                }
+
             case 2:
                 return <div>Add text content.</div>;
             case 3:
