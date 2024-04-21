@@ -24,7 +24,7 @@ export const Experience = () => {
         homerHeight: initialHeight,
         avatarPose: {
             value: "t-pose (default)",
-            options: ["t-pose (default)", "sit"]
+            options: ["t-pose (default)", "sit", "stand", "arms-crossed"]
         }
     });
 
@@ -52,6 +52,12 @@ export const Experience = () => {
                 modelGLTF="models/646d9dcdc8a5f5bddbfac913.glb"
                 pose={avatarPose}
             />
+            {/*<Avatar*/}
+            {/*    position={[-2, -2, 1]}*/}
+            {/*    scale={2}*/}
+            {/*    modelGLTF="models/harriet.glb"*/}
+            {/*    pose={avatarPose}*/}
+            {/*/>*/}
 
             {/*<Avatar position={[-2, -2, 1]} scale={2} modelGLTF="models/harriet.glb"/>*/}
 
