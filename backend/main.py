@@ -166,6 +166,18 @@ def uploaded_file(filename):
     return send_from_directory('session/images', filename)
 
 
+@app.route('/avatars/<filename>')
+@cross_origin()
+def send_uploaded_glb(filename):
+    return send_from_directory('session/avatars', filename)
+
+
+@app.route('/audio/<filename>')
+@cross_origin()
+def send_uploaded_audio(filename):
+    return send_from_directory('session/audio', filename)
+
+
 @app.route('/get-session', methods=['GET'])
 @cross_origin()
 def get_session_asset_names():

@@ -35,7 +35,6 @@ function TextSubmitter() {
                 Text:
                 <textarea
                     className='bg-gray-800 p-3'
-                    type="text"
                     value={text}
                     onChange={handleInputChange}
                 />
