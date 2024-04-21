@@ -126,6 +126,10 @@ export default function Home() {
         }
     }
 
+    function goToTheatre() {
+
+    }
+
 
     return (
         <main className="w-full min-h-screen p-24">
@@ -141,6 +145,14 @@ export default function Home() {
                         {name}
                     </button>
                 )}
+
+                <button
+                    key={4}
+                    className={activeTab === 4 ? "active px-3 py-1" : "px-3 py-1 selection-tab-btn"}
+                    onClick={() => router.push('/theatre')}
+                >
+                    Animate!
+                </button>
             </div>
             <hr className="horizontal-line"/>
 

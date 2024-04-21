@@ -144,8 +144,7 @@ export function Avatar(props) {
     });
 
     return (
-        // <group {...props} dispose={null} ref={group}>
-        <group {...props} dispose={null}>
+        <e.group theatreKey="avatar" {...props} dispose={null}>
             <primitive object={nodes.Hips} />
             <skinnedMesh
                 geometry={nodes.Wolf3D_Body.geometry}
@@ -204,7 +203,7 @@ export function Avatar(props) {
                 morphTargetDictionary={nodes.Wolf3D_Teeth.morphTargetDictionary}
                 morphTargetInfluences={nodes.Wolf3D_Teeth.morphTargetInfluences}
             />
-        </group>
+        </e.group>
     );
 }
 
