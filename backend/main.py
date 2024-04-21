@@ -97,11 +97,19 @@ def upload():
             # Fetch the .glb file from the URL
             response = requests.get(file_url)
             if response.status_code == 200:
+                # Extract the ID from the file URL
+                start_index = len("https://models.readyplayer.me/")
+                end_index = file_url.index(".glb")
+                avatar_id = file_url[start_index:end_index]
+
                 # Get current time
                 now = datetime.now()
                 time_string = now.strftime('%y%m%d-%H-%M-%S')
 
-                avatar_name = f'avatar-{time_string}.glb'
+                # avatar_name = f'avatar-{time_string}.glb'
+                avatar_name = f'{avatar_id}.glb'
+
+                image_name = generate_avatar_thumbnail(avatar_id)
 
                 # You might want to save the file or process it as needed
                 with open(f'session/avatars/{avatar_name}', 'wb') as f:
@@ -112,6 +120,7 @@ def upload():
 
                 current_session['avatars'][avatar_name] = {
                     'audio': None,
+                    'thumbnail': image_name
                 }
 
                 with open('session/session.json', 'w') as session_json:
@@ -123,6 +132,31 @@ def upload():
         else:
             return jsonify({"message": "No URL provided"}), 400
     return jsonify({"message": "Invalid request"}), 400
+
+
+def generate_avatar_thumbnail(avatarID):
+
+    base_url = "https://models.readyplayer.me/"
+
+    endpoint = ".png?camera=portrait"
+
+    # Make a GET request to the API
+    response = requests.get(base_url + avatarID + endpoint)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # The API responded with a 2D render of the avatar
+        avatar_image_data = response.content
+
+        avatar_name = f'{avatarID}.png'
+
+        with open(f'session/avatars/{avatar_name}', "wb") as file:
+            file.write(avatar_image_data)
+
+        return avatar_name
+    else:
+        # The request was not successful, handle the error
+        print("Failed to get avatar 2D render. Status code:", response.status_code)
 
 
 @app.route('/upload-image', methods=['POST'])
@@ -157,7 +191,8 @@ def upload_image_assets():
 
 def allowed_file(filename):
     return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+        filename.rsplit('.', 1)[1].lower() in {
+            'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 
 @app.route('/images/<filename>')
@@ -210,9 +245,10 @@ def attach_audio():
 
         # Running the rhubarb script
         try:
-            script_path = os.path.abspath('../../Rhubarb-Lip-Sync-1.13.0-Linux/')
+            script_path = os.path.abspath(
+                '../../Rhubarb-Lip-Sync-1.13.0-Linux/')
             audio_absolute_path = os.path.abspath(audio_path)
-            output_file_path = f'{audio_name.rsplit('.', 1)[0]}.json'
+            output_file_path = f"{audio_name.rsplit('.', 1)[0]}.json"
             command = [
                 script_path + '/rhubarb',
                 audio_absolute_path,
