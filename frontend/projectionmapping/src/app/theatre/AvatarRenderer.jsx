@@ -8,6 +8,7 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { useControls } from "leva";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { editable as e, SheetProvider } from "@theatre/r3f";
+import { getProject } from '@theatre/core'
 
 import * as THREE from "three";
 
@@ -24,10 +25,13 @@ const corresponding = {
 };
 
 export function Avatar(props) {
-    const { nodes, materials } = useGLTF('http://localhost:5000/avatars/65f86d86553ebe525eb5e280.glb')
 
-    const audio = useMemo(() => new Audio('http://localhost:5000/audio/audio-240420-19-31-07-output.ogg'), []);
-    const jsonFile = useLoader(THREE.FileLoader, 'http://localhost:5000/audio/audio-240420-19-31-07-output.json');
+    const { glbEndpoint, audioEndpoint, audioJsonEndpoint } = props
+
+    const { nodes, materials } = useGLTF(glbEndpoint)
+
+    const audio = useMemo(() => new Audio(audioEndpoint), []);
+    const jsonFile = useLoader(THREE.FileLoader, audioJsonEndpoint);
     const lipsync = JSON.parse(jsonFile);
 
     const {

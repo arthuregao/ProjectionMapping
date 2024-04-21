@@ -1,58 +1,46 @@
 'use client'
 
-import React from 'react'
-// import {Model} from './test'
-import {Avatar} from './temp'
-import {Canvas} from '@react-three/fiber'
-import {editable as e, SheetProvider} from "@theatre/r3f";
+// React Core
+import React from 'react';
+
+// Third-party libraries for 3D and graphics
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars, Environment } from "@react-three/drei";
-import {getProject} from "@theatre/core";
+import { editable as e, SheetProvider } from "@theatre/r3f";
+import { getProject } from "@theatre/core";
 import studio from "@theatre/studio";
 import extension from "@theatre/r3f/dist/extension";
 
-// const demoSheet = getProject("Demo Project").sheet("Demo Sheet");
+// Local components
+import { Avatar } from './AvatarRenderer';
 
-function TestTheatre(props) {
-    // return(
-    //     <div>
-    //         <h1>{props.name}</h1>
-    //         <Canvas>
-    //             <Model position={[0, 0, 0]}></Model>
-    //         </Canvas>
-    //     </div>
-    // )
 
-    const sizes = {
-        width: window.innerWidth,
-        height: window.innerHeight,
-    };
+const demoSheet = getProject("Demo Project").sheet("Demo Sheet");
+studio.initialize()
+studio.extend(extension)
+
+export default function Theatre(props) {
 
     return (
-        // <div style={{height: '2000px', width: '2000px'}}>
-        <Canvas camera={{ position: [5, 2, 10], fov: 30 }} style={{ width: "100vw", height: "100vh" }}>
-            {/*<color attach="background" args={["#fff"]} />*/}
-            {/*<Model position={[0, -3, 5]} scale={2}/>*/}
-            {/*<perspectiveCamera*/}
-            {/*    fov={75}*/}
-            {/*    aspect={sizes.width / sizes.height}*/}
-            {/*    position={[0, 0, 3]}*/}
-            {/*    near={0.1}*/}
-            {/*    far={100}*/}
-            {/*>*/}
+        <Canvas camera={{ position: [5, 2, 10], fov: 30 }} style={{ height: "100vh", margin: "0"}}>
+            <SheetProvider sheet={demoSheet}>
+                <OrbitControls />
+                <Avatar
+                    glbEndpoint='http://localhost:5000/avatars/65f86d86553ebe525eb5e280.glb'
+                    audioEndpoint='http://localhost:5000/audio/audio-240420-23-37-11-person1.ogg'
+                    audioJsonEndpoint='http://localhost:5000/audio/audio-240420-23-37-11-person1.json'
+                    position={[1, 0, 0]}
+                />
 
-            <OrbitControls />
-            {/*<Avatar position={[0, -3, 5]} scale={2}/>*/}
-            <Avatar/>
+                <Avatar
+                    glbEndpoint={'http://localhost:5000/avatars/avatar-240420-18-10-07.glb'}
+                    audioEndpoint='http://localhost:5000/audio/audio-240420-23-37-36-person2.ogg'
+                    audioJsonEndpoint='http://localhost:5000/audio/audio-240420-23-37-36-person2.json'
+                />
 
-            {/*<Model position={[0, -3, 5]} scale={0.5}/>*/}
-            {/*<Model />*/}
-
-
-            <Environment preset="sunset"/>
-            {/*</perspectiveCamera>*/}
+                <Environment preset="sunset"/>
+            </SheetProvider>
         </Canvas>
-        // </div>
     );
 }
 
-export default TestTheatre
