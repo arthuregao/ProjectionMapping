@@ -8,6 +8,7 @@ export default function AudioUpload({avatars}) {
 
     const [audioFile, setAudioFile] = useState(null);
     const [selectedAvatar, setSelectedAvatar] = useState('');
+    const [uploading, setUploading] = useState(false)
     const [currentSession, setCurrentSession] = useState({});
 
 
@@ -43,6 +44,8 @@ export default function AudioUpload({avatars}) {
     };
 
     const handleSubmit = async (event) => {
+        setUploading(true)
+
         event.preventDefault();
         if (audioFile && selectedAvatar) {
             const formData = new FormData();
@@ -97,6 +100,8 @@ export default function AudioUpload({avatars}) {
                                style={{display: 'block', margin: '10px 0'}}/>
                     </label>
                     <button className={'bg-gray-800 px-3 py-1 rounded-lg mt-3'} type="submit">Attach Audio</button>
+
+                    {uploading === true ? <h2>Uploading audio...</h2> : <h2></h2>}
                 </form>
 
                 <button className={'bg-gray-800 px-3 py-1 rounded-lg'} onClick={handleGoBack} style={{marginTop: '20px'}}>Back</button>

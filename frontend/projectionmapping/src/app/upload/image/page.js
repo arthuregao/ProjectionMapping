@@ -50,7 +50,7 @@ export default function ImageUpload() {
 
             <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange}/>
-                <button type="submit">Upload Image</button>
+                <button className={'p-3 bg-gray-500 hover:bg-gray-400 rounded-md'} type="submit">Upload Image</button>
             </form>
 
             <button onClick={handleGoBack}>Back</button>
