@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 import subprocess
+import platform
 
 import requests
 from datetime import datetime
@@ -222,7 +223,9 @@ def attach_audio():
 
         # Running the rhubarb script
         try:
-            script_path = os.path.abspath('../../Rhubarb-Lip-Sync-1.13.0-Linux/')
+            script_path = os.path.abspath('../../Rhubarb-Lip-Sync-1.13.0-macOS/') \
+                if platform.system().lower() == 'darwin' \
+                else os.path.abspath('../../Rhubarb-Lip-Sync-1.13.0-Linux/')
             audio_absolute_path = os.path.abspath(audio_path)
             output_file_path = f'{audio_name.rsplit('.', 1)[0]}.json'
             command = [
