@@ -16,20 +16,31 @@ export const Experience = () => {
     const {homerheight: initialHeight} = JSON.parse(localStorage.getItem('levaState')) || {homerheight: 1};
 
 
-    const numberOfControls = 5;
+    const numberOfSets = 2;
+    const controlsPerSet = 3;
 
-    const controls = Array.from({length: numberOfControls}, (_, index) => ({
-        label: `Control ${index + 1}`,
-        value: "t-pose (default)",
-        options: ["t-pose (default)", "sit", "stand", "arms-crossed"]
-    }));
+    const controlSets = Array.from({ length: numberOfSets }, (_, setIndex) => {
+        return Array.from({ length: controlsPerSet }, (_, controlIndex) => ({
+            label: `Control ${controlIndex + 1} (Set ${setIndex + 1})`,
+            value: "t-pose (default)",
+            options: ["t-pose (default)", "sit", "stand", "arms-crossed"]
+        }));
+    });
 
     const dynamicControls = useControls(() => {
         const dynamicControlObject = {};
-        controls.forEach((control, index) => {
-            dynamicControlObject[`control${index + 1}`] = {
-                value: control.value,
-                options: control.options
+        controlSets.forEach((controlSet, setIndex) => {
+            dynamicControlObject[`Avatar${setIndex + 1}-pose`] = {
+                value: "t-pose (default)",
+                options: ["t-pose (default)", "sit", "stand", "arms-crossed"]
+            };
+            dynamicControlObject[`Avatar${setIndex + 1}-ex_prop2`] = {
+                value: "a",
+                options: ["a", "b", "c"]
+            };
+            dynamicControlObject[`Avatar${setIndex + 1}-ex_prop3`] = {
+                value: "1",
+                options: ["1", "2", "3"]
             };
         });
         return dynamicControlObject;
@@ -62,7 +73,7 @@ export const Experience = () => {
 
     console.log(dynamicControls);
 
-    const avatarID = 4;
+    const avatarID = 2;
 
     return (
         <>
@@ -74,7 +85,7 @@ export const Experience = () => {
                 position={[0, -2, 1]}
                 scale={2}
                 modelGLTF="models/646d9dcdc8a5f5bddbfac913.glb"
-                pose={dynamicControls[0]['control' + avatarID]}
+                pose={dynamicControls[0]['Avatar' + avatarID + '-pose']}
             />
             {/*<Avatar*/}
             {/*    position={[-2, -2, 1]}*/}
