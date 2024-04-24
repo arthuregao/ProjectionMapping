@@ -18,7 +18,7 @@ export const Experience = () => {
 
     const numberOfControls = 5;
 
-    const controls = Array.from({ length: numberOfControls }, (_, index) => ({
+    const controls = Array.from({length: numberOfControls}, (_, index) => ({
         label: `Control ${index + 1}`,
         value: "t-pose (default)",
         options: ["t-pose (default)", "sit", "stand", "arms-crossed"]
@@ -34,7 +34,6 @@ export const Experience = () => {
         });
         return dynamicControlObject;
     });
-
 
 
     // leva UI controls
@@ -63,6 +62,8 @@ export const Experience = () => {
 
     console.log(dynamicControls);
 
+    const avatarID = 4;
+
     return (
         <>
             <OrbitControls enabled={true}/>
@@ -73,7 +74,7 @@ export const Experience = () => {
                 position={[0, -2, 1]}
                 scale={2}
                 modelGLTF="models/646d9dcdc8a5f5bddbfac913.glb"
-                pose={dynamicControls[0].control4}
+                pose={dynamicControls[0]['control' + avatarID]}
             />
             {/*<Avatar*/}
             {/*    position={[-2, -2, 1]}*/}
@@ -87,11 +88,11 @@ export const Experience = () => {
 
             <Environment preset="sunset"/>
 
-            <Background />
+            <Background/>
 
             <mesh position={[-3, -2, 0.1]}>
-                <planeGeometry args={[1, 1]} />
-                <meshBasicMaterial attach="material" map={balltexture} transparent={true} />
+                <planeGeometry args={[1, 1]}/>
+                <meshBasicMaterial attach="material" map={balltexture} transparent={true}/>
             </mesh>
 
             <Suspense fallback={null}>
