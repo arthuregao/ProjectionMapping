@@ -15,11 +15,32 @@ export const Experience = () => {
     // get initial values or defaults from local storage
     const {homerheight: initialHeight} = JSON.parse(localStorage.getItem('levaState')) || {homerheight: 1};
 
+
+    const numberOfControls = 5;
+
+    const controls = Array.from({ length: numberOfControls }, (_, index) => ({
+        label: `Control ${index + 1}`,
+        value: "t-pose (default)",
+        options: ["t-pose (default)", "sit", "stand", "arms-crossed"]
+    }));
+
+    const dynamicControls = useControls(() => {
+        const dynamicControlObject = {};
+        controls.forEach((control, index) => {
+            dynamicControlObject[`control${index + 1}`] = {
+                value: control.value,
+                options: control.options
+            };
+        });
+        return dynamicControlObject;
+    });
+
+
+
     // leva UI controls
     const {
         homerHeight,
         avatarPose,
-
     } = useControls({
         homerHeight: initialHeight,
         avatarPose: {
@@ -40,6 +61,8 @@ export const Experience = () => {
 
     const videoTexture = useVideoTexture("textures/earth.mp4");
 
+    console.log(dynamicControls);
+
     return (
         <>
             <OrbitControls enabled={true}/>
@@ -50,7 +73,7 @@ export const Experience = () => {
                 position={[0, -2, 1]}
                 scale={2}
                 modelGLTF="models/646d9dcdc8a5f5bddbfac913.glb"
-                pose={avatarPose}
+                pose={dynamicControls[0].control4}
             />
             {/*<Avatar*/}
             {/*    position={[-2, -2, 1]}*/}
