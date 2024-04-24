@@ -4,10 +4,13 @@ import {useRouter} from 'next/navigation'
 import React, {useEffect, useState} from "react";
 
 import "./style.css";
-import AvatarDisplay from "./components/AvatarDisplay"
-import ImageDisplay from "./components/ImageDisplay"
-import AudioDisplay from "./components/AudioDisplay"
-import TextDisplay from "./components/TextDisplay"
+import AvatarDisplay from "./components/AvatarDisplay";
+import ImageDisplay from "./components/ImageDisplay";
+import AudioDisplay from "./components/AudioDisplay";
+import TextDisplay from "./components/TextDisplay";
+
+import moon from "./upload/image/moon.png";
+import sun from "./upload/image/sun.png";
 
 export default function Home() {
 
@@ -59,7 +62,7 @@ export default function Home() {
                     // console.log(Object.entries(currentSession['avatars']))
                     // console.log('attempting to display avatars')
                     return (
-                        <div>Create or select avatars.
+                        <div className='sub-text'>Create or select avatars.
                             {Object.entries(currentSession['avatars']).map(([key, value], index) =>
                                 <AvatarDisplay name={key} key={index}></AvatarDisplay>
                             )}
@@ -67,7 +70,7 @@ export default function Home() {
                     );
                 } else {
                     return (
-                        <div>Create or select avatars.</div>
+                        <div className='sub-text'>Create or select avatars.</div>
                     )
                 }
             case 1:
@@ -75,7 +78,7 @@ export default function Home() {
                 if (currentSession['images']) {
                     console.log('attempting to display images')
                     return (
-                        <div>
+                        <div className='sub-text'>
                             Upload images here.
 
                             {currentSession['images'].map((value, index) =>
@@ -84,7 +87,7 @@ export default function Home() {
                         </div>
                     );
                 } else {
-                    return <div>Upload images here.</div>;
+                    return <div className='sub-text'>Upload images here.</div>;
                 }
 
             case 2:
@@ -92,7 +95,7 @@ export default function Home() {
                 if (currentSession['text']) {
                     console.log('attempting to display text')
                     return (
-                        <div>
+                        <div className='sub-text'>
                             Add text content.
 
                             {currentSession['text'].map((value, index) =>
@@ -102,14 +105,14 @@ export default function Home() {
                     )
                 } else {
 
-                return <div>Add text content.</div>;
+                return <div className='sub-text'>Add text content.</div>;
                 }
             case 3:
 
                 if (currentSession['audio']) {
                     console.log('attempting to display audio')
                     return (
-                        <div>
+                        <div className='sub-text'>
                             Upload Audio here.
 
                             {currentSession['audio'].map((value, index) =>
@@ -118,11 +121,11 @@ export default function Home() {
                         </div>
                     );
                 } else {
-                    return <div>Upload Audio here.</div>;
+                    return <div className='sub-text'>Upload Audio here.</div>;
                 }
 
             default:
-                return <div>Select a category to add content.</div>;
+                return <div className='sub-text'>Select a category to add content.</div>;
         }
     }
 
@@ -130,16 +133,32 @@ export default function Home() {
 
     }
 
+    const switchTheme = event => {
+        const icon = document.getElementById("theme-icon");
+        document.body.classList.toggle("light-theme");
+        if (document.body.classList.contains("light-theme")) {
+            icon.src = sun;
+        } else {
+            icon.src = moon;
+        }
+    }
+
 
     return (
-        <main className="w-full min-h-screen p-24">
-            <h1>Projection Mapping</h1>
-            <h2 className="mb-10">Welcome, Samira!</h2>
-            <div className="flex tab-group" style={{gap: "10px"}}>
+        <main className="min-h-screen p-24">
+            <div className='theme-switch'>
+                <h2>Welcome!</h2>
+                <img src={moon}
+                    id='theme-icon'
+                    onClick={switchTheme}
+                />
+            </div>
+            <h1 className="mb-10 title">Projection Mapping</h1>
+            <div className="flex tab-group">
                 {tabList.map((name, i) =>
                     <button
                         key={i}
-                        className={activeTab === i ? "active px-3 py-1" : "px-3 py-1 selection-tab-btn"}
+                        className={activeTab === i ? "active px-7 py-2" : "px-7 py-2 selection-tab-btn"}
                         onClick={() => setActiveTab(i)}
                     >
                         {name}
@@ -148,26 +167,26 @@ export default function Home() {
 
                 <button
                     key={4}
-                    className={activeTab === 4 ? "active px-3 py-1" : "px-3 py-1 selection-tab-btn"}
+                    className={activeTab === 4 ? "active px-7 py-2" : "px-7 py-2 selection-tab-btn"}
                     onClick={() => router.push('/theatre')}
                 >
                     Animate!
                 </button>
             </div>
-            <hr className="horizontal-line"/>
 
             {/*render the correct component based on tab*/}
             {renderTabContent()}
 
             <button
-                className="add-btn mt-10 font-light text-4xl"
+                className="add-btn mt-7 px-4 py-2"
                 type="submit"
                 onClick={() => {
                     handleAdd();
                 }}
             >
-                +
+                + Add new
             </button>
+
         </main>
     );
 }

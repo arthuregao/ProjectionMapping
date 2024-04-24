@@ -1,28 +1,51 @@
+:root {
+    --background: #0B1419;
+    --main-text: #F6F6F6;
+    --sub-text: #999999;
+    --main-blue: #74FBFC;
+    --dark-grey: #32333D;
+    --muted-white: #ECECEB;
+}
+
+.light-theme {
+    --background: #F6F6F6;
+    --main-text: #0B1419;
+    --sub-text: #7C7D8B;
+    --main-blue: #74FBFC;
+    --dark-grey: #32333D;
+    --muted-white: #ECECEB;
+}
+
+main {
+    background-color: var(--background);
+}
+
+.title {
+    color: var(--main-text);
+}
+
+.tab-group {
+    border: .5px solid var(--dark-grey);
+    border-radius: 3px;
+}
+
 .selection-tab-btn {
-    color: #cbcbcb;
+    color: var(--sub-text);
 }
 
 .selection-tab-btn:hover {
-    background-color: #3f3f3f;
-    border-radius: 4px;
-}
-
-.horizontal-line {
-    border: .5px solid #ECECEB;
+    background-color: var(--dark-grey);
 }
 
 .active {
-    color: #ffffff;
-    background-color: #FF5733;
-    border-radius: 4px;
-    border-bottom: 1px solid #000000;
+    color: var(--main-blue);
+    background-color: var(--dark-grey);
 }
 
 .add-btn {
-    width: 154px;
-    height: 154px;
-    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='white' stroke-width='2' stroke-dasharray='8%2c 10' stroke-dashoffset='0' stroke-linecap='round'/%3e%3c/svg%3e");
-    line-height: 154px;
+    color: var(--dark-grey);
+    background-color: var(--main-blue);
+    border-radius: 3px;
 }
 
 h1 {
@@ -32,5 +55,16 @@ h1 {
 
 h2 {
     font-size: 1.3rem;
-    color: #999999;
+    color: var(--sub-text);
+}
+
+.sub-text {
+    color: var(--sub-text);
+    font-size: 1rem;
+    margin-top: 3px;
+}
+
+.theme-switch {
+    display: flex;
+    justify-content: space-between;
 }
