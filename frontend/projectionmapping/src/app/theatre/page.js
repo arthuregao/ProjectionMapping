@@ -1,20 +1,22 @@
 'use client'
 
 // React Core
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 // Third-party libraries for 3D and graphics
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, Environment } from "@react-three/drei";
-import { editable as e, SheetProvider } from "@theatre/r3f";
-import { getProject } from "@theatre/core";
-import { useVal } from "@theatre/react"
-import studio, { IExtension } from "@theatre/studio";
+import {Canvas} from '@react-three/fiber';
+import {OrbitControls, Stars, Environment} from "@react-three/drei";
+import {editable as e, SheetProvider} from "@theatre/r3f";
+import {getProject} from "@theatre/core";
+import {useVal} from "@theatre/react"
+import studio, {IExtension} from "@theatre/studio";
 import extension from "@theatre/r3f/dist/extension";
 
 // Local components
-import { AvatarRendererList } from './Avatars';
+import {Avatar} from './AvatarRenderer';
 import SheetImage from "./ImageRenderer";
+
+
 
 const demoSheet = getProject("Demo Project").sheet("Demo Sheet");
 
@@ -65,15 +67,24 @@ export default function Theatre(props) {
     }, [])
 
     if (currentSession['avatars']) {
-        console.log("Current Avatars: ");
-        console.log(Object.entries(currentSession['avatars']));
+
+
         Object.entries(currentSession['avatars']).map(([key, value], index) => console.log(key, value));
         return (
-            <Canvas camera={{ position: [5, 2, 10], fov: 30 }} style={{ height: "100vh", margin: "0" }}>
+            <Canvas camera={{position: [5, 2, 10], fov: 30}} style={{height: "100vh", margin: "0"}}>
                 <SheetProvider sheet={demoSheet}>
-                    <OrbitControls />
+                    <OrbitControls/>
 
-                    <AvatarRendererList avatars={currentSession['avatars']} />
+                    {Object.entries(currentSession['avatars']).map(([key, value], index) =>
+                        <Avatar
+                            theatreKey={`person${key}`}
+                            glbEndpoint={`http://localhost:5000/avatars/${key}`}
+                            audioEndpoint={`http://localhost:5000/audio/${value['audio']}`}
+                            audioJsonEndpoint={`http://localhost:5000/audio/${value['audio_json']}`}
+                            position={[index, 0, 0]}
+                            key={index}
+                        />
+                    )}
 
                     {currentSession['images'].map((value, index) =>
                         <SheetImage
@@ -82,7 +93,7 @@ export default function Theatre(props) {
                         />
                     )}
 
-                    <Environment preset="sunset" />
+                    <Environment preset="sunset"/>
                 </SheetProvider>
             </Canvas>
         );

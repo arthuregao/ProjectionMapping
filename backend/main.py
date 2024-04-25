@@ -227,7 +227,7 @@ def attach_audio():
                 if platform.system().lower() == 'darwin' \
                 else os.path.abspath('../../Rhubarb-Lip-Sync-1.13.0-Linux/')
             audio_absolute_path = os.path.abspath(audio_path)
-            output_file_path = f'{audio_name.rsplit(".", 1)[0]}.json'
+            output_file_path = f'{audio_name.rsplit('.', 1)[0]}.json'
             command = [
                 script_path + '/rhubarb',
                 audio_absolute_path,
