@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 
 import "./style.css";
 import AvatarDisplay from "./components/AvatarDisplay";
+import ThumbnailDisplay from "./components/ThumbnailDisplay";
 import ImageDisplay from "./components/ImageDisplay";
 import AudioDisplay from "./components/AudioDisplay";
 import TextDisplay from "./components/TextDisplay";
@@ -62,10 +63,14 @@ export default function Home() {
                     // console.log(Object.entries(currentSession['avatars']))
                     // console.log('attempting to display avatars')
                     return (
-                        <div className='sub-text'>Create or select avatars.
-                            {Object.entries(currentSession['avatars']).map(([key, value], index) =>
-                                <AvatarDisplay name={key} key={index}></AvatarDisplay>
-                            )}
+                        <div className='sub-text'>
+                            Create or select avatars.
+                            {Object.entries(currentSession['avatars']).map(([key, value], index) => (
+                                <React.Fragment key={index}>
+                                    <AvatarDisplay name={key}></AvatarDisplay>
+                                    {value.thumbnail ? <ThumbnailDisplay name={value.thumbnail}></ThumbnailDisplay> : null}
+                                </React.Fragment>
+                            ))}
                         </div>
                     );
                 } else {
