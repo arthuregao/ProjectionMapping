@@ -49,11 +49,11 @@ export function Avatar(props) {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
+            // toggle with space bar
             if (event.code === "Space") {
                 setIsPlaying((prevIsPlaying) => !prevIsPlaying);
             }
         };
-
         window.addEventListener("keydown", handleKeyDown);
 
         return () => {
@@ -62,12 +62,14 @@ export function Avatar(props) {
     }, []);
 
     useEffect(() => {
+        // morph targets for rhubarb
         nodes.Wolf3D_Head.morphTargetInfluences[
             nodes.Wolf3D_Head.morphTargetDictionary["viseme_I"]
             ] = 1;
         nodes.Wolf3D_Teeth.morphTargetInfluences[
             nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_I"]
             ] = 1;
+        // state toggled by previous event listener
         if (isPlaying) {
             audio.play();
         } else {
@@ -78,12 +80,12 @@ export function Avatar(props) {
     // when tracks have completed, add handleAudioEnded handler so 
     // the next space bar press starts another iteration of the audio
     useEffect(() => {
+        // when audio ends, reset state so additional spacebar press
+        // isn't needed
         const handleAudioEnded = () => {
             setIsPlaying(false);
         };
-
         audio.addEventListener("ended", handleAudioEnded);
-
         return () => {
             audio.removeEventListener("ended", handleAudioEnded);
         };
