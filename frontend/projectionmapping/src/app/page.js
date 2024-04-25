@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 
 import "./style.css";
 import AvatarDisplay from "./components/AvatarDisplay";
+import ThumbnailDisplay from "./components/ThumbnailDisplay";
 import ImageDisplay from "./components/ImageDisplay";
 import AudioDisplay from "./components/AudioDisplay";
 import TextDisplay from "./components/TextDisplay";
