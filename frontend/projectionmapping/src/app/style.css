@@ -5,6 +5,7 @@
     --main-blue: #74FBFC;
     --dark-grey: #32333D;
     --muted-white: #ECECEB;
+    --box: #0B1419;
 }
 
 .light-theme {
@@ -14,6 +15,7 @@
     --main-blue: #74FBFC;
     --dark-grey: #32333D;
     --muted-white: #ECECEB;
+    --box: #32333D;
 }
 
 main {
@@ -67,4 +69,29 @@ h2 {
 .theme-switch {
     display: flex;
     justify-content: space-between;
+}
+
+.avatar-con {
+    color: var(--main-blue);
+    border: .5px solid var(--dark-grey);
+    background-color: var(--box);
+}
+
+.upload-col {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media screen and (max-width: 1000px) {
+    .upload-col {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+
+.upload-img input {
+    width: 50%;
+}
+
+.theme-switch img {
+    height: auto; 
+    max-width: 3%;
 }

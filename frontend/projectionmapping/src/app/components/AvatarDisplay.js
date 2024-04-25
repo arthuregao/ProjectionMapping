@@ -3,7 +3,7 @@ import React from 'react'
 
 function AvatarDisplay(props) {
     return(
-        <h1>{props.name}</h1>
+        <div className='avatar-con px-4 py-2'>{props.name}</div>
     )
 }
 

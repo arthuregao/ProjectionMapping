@@ -101,7 +101,11 @@ export default function AudioUpload({avatars}) {
                     </label>
                     <button className={'bg-gray-800 px-3 py-1 rounded-lg mt-3'} type="submit">Attach Audio</button>
 
-                    {uploading === true ? <h2>Uploading audio...</h2> : <h2></h2>}
+                    {uploading === true ? <div className="flex mt-3 min-h-screen"><div className="text-xl font-semibold text-gray-100">
+                    Uploading...
+                    <span className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>
+                </div>
+            </div> : <h2></h2>}
                 </form>
 
                 <button className={'bg-gray-800 px-3 py-1 rounded-lg'} onClick={handleGoBack} style={{marginTop: '20px'}}>Back</button>
