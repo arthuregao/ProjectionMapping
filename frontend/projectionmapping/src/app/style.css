@@ -90,3 +90,8 @@ h2 {
 .upload-img input {
     width: 50%;
 }
+
+.theme-switch img {
+    height: auto; 
+    max-width: 3%;
+}
