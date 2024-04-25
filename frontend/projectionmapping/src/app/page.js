@@ -9,8 +9,6 @@ import ImageDisplay from "./components/ImageDisplay";
 import AudioDisplay from "./components/AudioDisplay";
 import TextDisplay from "./components/TextDisplay";
 
-import {moonIcon} from "./images/moon.png";
-import {sunIcon} from "./images/sun.png";
 
 export default function Home() {
 
@@ -62,10 +60,13 @@ export default function Home() {
                     // console.log(Object.entries(currentSession['avatars']))
                     // console.log('attempting to display avatars')
                     return (
-                        <div className='sub-text'>Create or select avatars.
-                            {Object.entries(currentSession['avatars']).map(([key, value], index) =>
-                                <AvatarDisplay name={key} key={index}></AvatarDisplay>
-                            )}
+                        <div>
+                            <div className='sub-text'>Create or select avatars.</div>
+                            <div className='upload-col grid mt-7 gap-4'>
+                                {Object.entries(currentSession['avatars']).map(([key, value], index) =>
+                                    <AvatarDisplay name={key} key={index}></AvatarDisplay>
+                                )}
+                            </div>
                         </div>
                     );
                 } else {
@@ -78,12 +79,14 @@ export default function Home() {
                 if (currentSession['images']) {
                     console.log('attempting to display images')
                     return (
-                        <div className='sub-text'>
-                            Upload images here.
-
-                            {currentSession['images'].map((value, index) =>
-                                <ImageDisplay name={value} key={index}></ImageDisplay>
-                            )}
+                        <div>
+                            <div className='sub-text'>
+                                Upload images here.</div>
+                            <div className='upload-col grid mt-7 gap-4'>
+                                {currentSession['images'].map((value, index) =>
+                                    <ImageDisplay name={value} key={index}></ImageDisplay>
+                                )}
+                            </div>
                         </div>
                     );
                 } else {
@@ -95,12 +98,14 @@ export default function Home() {
                 if (currentSession['text']) {
                     console.log('attempting to display text')
                     return (
+                        <div>
                         <div className='sub-text'>
-                            Add text content.
-
-                            {currentSession['text'].map((value, index) =>
-                                <TextDisplay name={value} key={index}/>
-                            )}
+                            Add text content.</div>
+                            <div className='upload-col grid mt-7 gap-4'>
+                                {currentSession['text'].map((value, index) =>
+                                    <TextDisplay name={value} key={index}/>
+                                )}
+                            </div>
                         </div>
                     )
                 } else {
@@ -112,12 +117,14 @@ export default function Home() {
                 if (currentSession['audio']) {
                     console.log('attempting to display audio')
                     return (
-                        <div className='sub-text'>
-                            Upload Audio here.
-
-                            {currentSession['audio'].map((value, index) =>
-                                <AudioDisplay name={value} key={index}></AudioDisplay>
-                            )}
+                        <div>
+                            <div className='sub-text'>
+                                Upload Audio here.</div>
+                            <div className='upload-col grid mt-7 gap-4'>
+                                {currentSession['audio'].map((value, index) =>
+                                    <AudioDisplay name={value} key={index}></AudioDisplay>
+                                )}
+                            </div>
                         </div>
                     );
                 } else {
@@ -137,9 +144,9 @@ export default function Home() {
         const icon = document.getElementById("theme-icon");
         document.body.classList.toggle("light-theme");
         if (document.body.classList.contains("light-theme")) {
-            icon.src = sunIcon;
+            icon.src = '/assets/sun.png';
         } else {
-            icon.src = moonIcon;
+            icon.src = '/assets/moon.png';
         }
     }
 
@@ -148,10 +155,12 @@ export default function Home() {
         <main className="min-h-screen p-24">
             <div className='theme-switch'>
                 <h2>Welcome!</h2>
-                <img src={moonIcon}
+                <img alt='moon'
+                    src='/assets/moon.png'
                     id='theme-icon'
                     onClick={switchTheme}
                 />
+
             </div>
             <h1 className="mb-10 title">Projection Mapping</h1>
             <div className="flex tab-group">

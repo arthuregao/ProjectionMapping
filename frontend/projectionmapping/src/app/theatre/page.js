@@ -99,7 +99,7 @@ export default function Theatre(props) {
         );
     } else {
         return (
-            <div className="flex justify-center items-center min-h-screen">
+            <div className="flex flex-col justify-start items-center min-h-screen">
                 <div className="text-xl font-semibold text-gray-100">
                     Loading...
                     <span className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>
