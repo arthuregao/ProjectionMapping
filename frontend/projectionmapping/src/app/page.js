@@ -9,8 +9,8 @@ import ImageDisplay from "./components/ImageDisplay";
 import AudioDisplay from "./components/AudioDisplay";
 import TextDisplay from "./components/TextDisplay";
 
-import moon from "./upload/image/moon.png";
-import sun from "./upload/image/sun.png";
+import {moonIcon} from "./images/moon.png";
+import {sunIcon} from "./images/sun.png";
 
 export default function Home() {
 
@@ -137,9 +137,9 @@ export default function Home() {
         const icon = document.getElementById("theme-icon");
         document.body.classList.toggle("light-theme");
         if (document.body.classList.contains("light-theme")) {
-            icon.src = sun;
+            icon.src = sunIcon;
         } else {
-            icon.src = moon;
+            icon.src = moonIcon;
         }
     }
 
@@ -148,7 +148,7 @@ export default function Home() {
         <main className="min-h-screen p-24">
             <div className='theme-switch'>
                 <h2>Welcome!</h2>
-                <img src={moon}
+                <img src={moonIcon}
                     id='theme-icon'
                     onClick={switchTheme}
                 />
