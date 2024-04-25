@@ -35,14 +35,31 @@ export function Avatar(props) {
     const lipsync = JSON.parse(jsonFile);
 
     const {
-        playAudio,
+        // playAudio,
         smoothMorphTarget,
         morphTargetSmoothing,
     } = useControls({
-        playAudio: false,
+        // playAudio: false,
         smoothMorphTarget: true,
         morphTargetSmoothing: 0.5
     });
+
+    // replace playAudio control from Leva UI with spacebar toggle
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.code === "Space") {
+                setIsPlaying((prevIsPlaying) => !prevIsPlaying);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     useEffect(() => {
         nodes.Wolf3D_Head.morphTargetInfluences[
@@ -51,13 +68,27 @@ export function Avatar(props) {
         nodes.Wolf3D_Teeth.morphTargetInfluences[
             nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_I"]
             ] = 1;
-        if (playAudio) {
+        if (isPlaying) {
             audio.play();
         } else {
             audio.pause();
         }
-    }, [playAudio]);
+    }, [isPlaying]);
 
+    // when tracks have completed, add handleAudioEnded handler so 
+    // the next space bar press starts another iteration of the audio
+    useEffect(() => {
+        const handleAudioEnded = () => {
+            setIsPlaying(false);
+        };
+
+        audio.addEventListener("ended", handleAudioEnded);
+
+        return () => {
+            audio.removeEventListener("ended", handleAudioEnded);
+        };
+    }, []);
+ 
     useFrame(() => {
         const currentAudioTime = audio.currentTime;
 
@@ -68,7 +99,7 @@ export function Avatar(props) {
                     ] = 0;
                 nodes.Wolf3D_Teeth.morphTargetInfluences[
                     nodes.Wolf3D_Teeth.morphTargetDictionary[value]
-                    ] = 0;
+                    ] = 0
             } else {
                 nodes.Wolf3D_Head.morphTargetInfluences[
                     nodes.Wolf3D_Head.morphTargetDictionary[value]
