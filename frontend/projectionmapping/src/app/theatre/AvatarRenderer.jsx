@@ -7,7 +7,7 @@ import { useAnimations, useFBX, useGLTF } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useControls } from "leva";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { editable as e, editable, SheetProvider } from "@theatre/r3f";
+import { editable as e, SheetProvider } from "@theatre/r3f";
 import { getProject } from '@theatre/core'
 
 import * as THREE from "three";
@@ -47,10 +47,10 @@ export function Avatar(props) {
     useEffect(() => {
         nodes.Wolf3D_Head.morphTargetInfluences[
             nodes.Wolf3D_Head.morphTargetDictionary["viseme_I"]
-        ] = 1;
+            ] = 1;
         nodes.Wolf3D_Teeth.morphTargetInfluences[
             nodes.Wolf3D_Teeth.morphTargetDictionary["viseme_I"]
-        ] = 1;
+            ] = 1;
         if (playAudio) {
             audio.play();
         } else {
@@ -65,27 +65,27 @@ export function Avatar(props) {
             if (!smoothMorphTarget) {
                 nodes.Wolf3D_Head.morphTargetInfluences[
                     nodes.Wolf3D_Head.morphTargetDictionary[value]
-                ] = 0;
+                    ] = 0;
                 nodes.Wolf3D_Teeth.morphTargetInfluences[
                     nodes.Wolf3D_Teeth.morphTargetDictionary[value]
-                ] = 0;
+                    ] = 0;
             } else {
                 nodes.Wolf3D_Head.morphTargetInfluences[
                     nodes.Wolf3D_Head.morphTargetDictionary[value]
-                ] = THREE.MathUtils.lerp(
+                    ] = THREE.MathUtils.lerp(
                     nodes.Wolf3D_Head.morphTargetInfluences[
-                    nodes.Wolf3D_Head.morphTargetDictionary[value]
-                    ],
+                        nodes.Wolf3D_Head.morphTargetDictionary[value]
+                        ],
                     0,
                     morphTargetSmoothing
                 );
 
                 nodes.Wolf3D_Teeth.morphTargetInfluences[
                     nodes.Wolf3D_Teeth.morphTargetDictionary[value]
-                ] = THREE.MathUtils.lerp(
+                    ] = THREE.MathUtils.lerp(
                     nodes.Wolf3D_Teeth.morphTargetInfluences[
-                    nodes.Wolf3D_Teeth.morphTargetDictionary[value]
-                    ],
+                        nodes.Wolf3D_Teeth.morphTargetDictionary[value]
+                        ],
                     0,
                     morphTargetSmoothing
                 );
@@ -101,38 +101,38 @@ export function Avatar(props) {
                 if (!smoothMorphTarget) {
                     nodes.Wolf3D_Head.morphTargetInfluences[
                         nodes.Wolf3D_Head.morphTargetDictionary[
-                        corresponding[mouthCue.value]
-                        ]
-                    ] = 1;
+                            corresponding[mouthCue.value]
+                            ]
+                        ] = 1;
                     nodes.Wolf3D_Teeth.morphTargetInfluences[
                         nodes.Wolf3D_Teeth.morphTargetDictionary[
-                        corresponding[mouthCue.value]
-                        ]
-                    ] = 1;
+                            corresponding[mouthCue.value]
+                            ]
+                        ] = 1;
                 } else {
                     nodes.Wolf3D_Head.morphTargetInfluences[
                         nodes.Wolf3D_Head.morphTargetDictionary[
-                        corresponding[mouthCue.value]
-                        ]
-                    ] = THREE.MathUtils.lerp(
+                            corresponding[mouthCue.value]
+                            ]
+                        ] = THREE.MathUtils.lerp(
                         nodes.Wolf3D_Head.morphTargetInfluences[
-                        nodes.Wolf3D_Head.morphTargetDictionary[
-                        corresponding[mouthCue.value]
-                        ]
-                        ],
+                            nodes.Wolf3D_Head.morphTargetDictionary[
+                                corresponding[mouthCue.value]
+                                ]
+                            ],
                         1,
                         morphTargetSmoothing
                     );
                     nodes.Wolf3D_Teeth.morphTargetInfluences[
                         nodes.Wolf3D_Teeth.morphTargetDictionary[
-                        corresponding[mouthCue.value]
-                        ]
-                    ] = THREE.MathUtils.lerp(
+                            corresponding[mouthCue.value]
+                            ]
+                        ] = THREE.MathUtils.lerp(
                         nodes.Wolf3D_Teeth.morphTargetInfluences[
-                        nodes.Wolf3D_Teeth.morphTargetDictionary[
-                        corresponding[mouthCue.value]
-                        ]
-                        ],
+                            nodes.Wolf3D_Teeth.morphTargetDictionary[
+                                corresponding[mouthCue.value]
+                                ]
+                            ],
                         1,
                         morphTargetSmoothing
                     );
@@ -143,117 +143,8 @@ export function Avatar(props) {
         }
     });
 
-    const group = useRef();
-
-    // poses
-    // t-pose (default)
-    // reset avatar to default pose
-    // need to update with each added pose to reset rotations
-    useEffect(() => {
-        // reset body parts
-        // legs
-        group.current.getObjectByName("LeftUpLeg").rotation.set(Math.PI, Math.PI, 0);
-        group.current.getObjectByName("RightUpLeg").rotation.set(Math.PI, Math.PI, 0);
-        group.current.getObjectByName("LeftLeg").rotation.set(0, 0, 0);
-        group.current.getObjectByName("RightLeg").rotation.set(0, 0, 0);
-        // arms
-        const targetRotationLeft = new THREE.Quaternion();
-        targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4);
-        group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
-        const targetRotationRight = new THREE.Quaternion();
-        targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4);
-        group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
-        // straighten forearms
-        const targetRotationLeftForearm = new THREE.Quaternion();
-        targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
-        group.current.getObjectByName("LeftForeArm").quaternion.copy(targetRotationLeftForearm);
-        const targetRotationRightForearm = new THREE.Quaternion();
-        targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
-        group.current.getObjectByName("RightForeArm").quaternion.copy(targetRotationRightForearm);
-        // straighten legs
-        group.current.getObjectByName("LeftUpLeg").rotation.set(Math.PI, Math.PI, 0);
-        group.current.getObjectByName("RightUpLeg").rotation.set(Math.PI, Math.PI, 0);
-        group.current.getObjectByName("LeftLeg").rotation.set(0, 0, 0);
-        group.current.getObjectByName("RightLeg").rotation.set(0, 0, 0);
-        // straighten hands
-        const targetRotationLeftHand = new THREE.Quaternion();
-        targetRotationLeftHand.setFromAxisAngle(new THREE.Vector3(0, 0, 0), 0.);
-        group.current.getObjectByName("LeftHand").quaternion.copy(targetRotationLeftHand);
-        const targetRotationRightHand = new THREE.Quaternion();
-        targetRotationRightHand.setFromAxisAngle(new THREE.Vector3(0, 0, 0), 0);
-        group.current.getObjectByName("RightHand").quaternion.copy(targetRotationRightHand);
-
-        // strike the pose
-        if (props.pose === "t-pose (default)") {
-            // legs
-            group.current.getObjectByName("LeftUpLeg").rotation.set(Math.PI, Math.PI, 0);
-            group.current.getObjectByName("RightUpLeg").rotation.set(Math.PI, Math.PI, 0);
-            group.current.getObjectByName("LeftLeg").rotation.set(0, 0, 0);
-            group.current.getObjectByName("RightLeg").rotation.set(0, 0, 0);
-            // arms
-            const targetRotationLeft = new THREE.Quaternion();
-            targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4);
-            group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
-            const targetRotationRight = new THREE.Quaternion();
-            targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4);
-            group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
-        }
-        else if (props.pose === "sit") {
-            // bend legs
-            const thighbendangle = Math.PI / 2;
-            group.current.getObjectByName("LeftUpLeg").rotation.x = thighbendangle;
-            group.current.getObjectByName("RightUpLeg").rotation.x = thighbendangle;
-            const kneebendangle = -Math.PI / 2;
-            group.current.getObjectByName("LeftLeg").rotation.x = kneebendangle;
-            group.current.getObjectByName("RightLeg").rotation.x = kneebendangle;
-            // lower arms to their sides
-            const targetRotationLeft = new THREE.Quaternion();
-            targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
-            group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
-            const targetRotationRight = new THREE.Quaternion();
-            targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
-            group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
-        }
-        else if (props.pose === "stand") {
-            // lower arms to their sides
-            const targetRotationLeft = new THREE.Quaternion();
-            targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
-            group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
-            const targetRotationRight = new THREE.Quaternion();
-            targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.4);
-            group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
-        }
-        else if (props.pose === "arms-crossed") {
-            // lower arms to their sides
-            const targetRotationLeft = new THREE.Quaternion();
-            targetRotationLeft.setFromAxisAngle(new THREE.Vector3(1, -0.5, 0), 1.4);
-            group.current.getObjectByName("LeftArm").quaternion.copy(targetRotationLeft);
-            const targetRotationRight = new THREE.Quaternion();
-            targetRotationRight.setFromAxisAngle(new THREE.Vector3(1, 0.5, 0), 1.4);
-            group.current.getObjectByName("RightArm").quaternion.copy(targetRotationRight);
-            // bend forearms
-            const targetRotationLeftForearm = new THREE.Quaternion();
-            targetRotationLeftForearm.setFromAxisAngle(new THREE.Vector3(1, 0.1, 0), 1.6);
-            group.current.getObjectByName("LeftForeArm").quaternion.copy(targetRotationLeftForearm);
-            const targetRotationRightForearm = new THREE.Quaternion();
-            targetRotationRightForearm.setFromAxisAngle(new THREE.Vector3(1, -0.5, 0), 1.5);
-            group.current.getObjectByName("RightForeArm").quaternion.copy(targetRotationRightForearm);
-            // move hands
-            const targetRotationLeftHand = new THREE.Quaternion();
-            targetRotationLeftHand.setFromAxisAngle(new THREE.Vector3(1, 2, 0), 0.5);
-            group.current.getObjectByName("LeftHand").quaternion.copy(targetRotationLeftHand);
-            const targetRotationRightHand = new THREE.Quaternion();
-            targetRotationRightHand.setFromAxisAngle(new THREE.Vector3(1, 1, 0), 0.6);
-            group.current.getObjectByName("RightHand").quaternion.copy(targetRotationRightHand);
-            // hand size
-            group.current.getObjectByName("LeftHand").scale.set(0.8, 0.9, 1);
-            group.current.getObjectByName("RightHand").scale.set(1, 0.9, 1);
-        }
-        console.log(nodes);
-    }, [props.pose]);
-
     return (
-        <e.group theatreKey="avatar" {...props} dispose={null} ref={group}>
+        <e.group theatreKey="avatar" {...props} dispose={null}>
             <primitive object={nodes.Hips} />
             <skinnedMesh
                 geometry={nodes.Wolf3D_Body.geometry}
