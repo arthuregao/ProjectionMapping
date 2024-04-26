@@ -64,9 +64,12 @@ export default function Home() {
                         <div>
                             <div className='sub-text'>Create or select avatars.</div>
                             <div className='upload-col grid mt-7 gap-4'>
-                                {Object.entries(currentSession['avatars']).map(([key, value], index) =>
-                                    <AvatarDisplay name={key} key={index}></AvatarDisplay>
-                                )}
+                                {Object.entries(currentSession['avatars']).map(([key, value], index) => (
+                                    <React.Fragment key={index}>
+                                        {/*<AvatarDisplay name={key}></AvatarDisplay>*/}
+                                        {value.thumbnail ? <ThumbnailDisplay name={value.thumbnail}></ThumbnailDisplay> : null}
+                                    </React.Fragment>
+                                ))}
                             </div>
                         </div>
                     );

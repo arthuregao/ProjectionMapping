@@ -44,7 +44,7 @@ function AvatarGallery(props) {
     if (error) return <p>Error loading images: {error}</p>;
 
     return (
-        <div>
+        <div className="avatar-con">
             {images.map((image, index) => (
                 <img key={index} src={image.url} alt={`Loaded image ${index}`} />
             ))}

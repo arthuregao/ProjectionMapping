@@ -5,7 +5,7 @@
     --main-blue: #74FBFC;
     --dark-grey: #32333D;
     --muted-white: #ECECEB;
-    --box: #0B1419;
+    --box: #74FBFC;
 }
 
 .light-theme {
@@ -72,9 +72,14 @@ h2 {
 }
 
 .avatar-con {
-    color: var(--main-blue);
-    border: .5px solid var(--dark-grey);
-    background-color: var(--box);
+    border: .5px solid var(--box);
+    background-color: var(--background);
+}
+
+.audio-con {
+    color: var(--main-text);
+    border: .5px solid var(--box);
+    background-color: var(--background);
 }
 
 .upload-col {
@@ -94,4 +99,20 @@ h2 {
 .theme-switch img {
     height: auto; 
     max-width: 3%;
+}
+
+.add-audio {
+    height: 100%;
+    width: 100%;
+    color: var(--main-text);
+    background-color: var(--background);
+}
+
+.dark-font {
+    color: var(--main-text);
+}
+
+select {
+    color: var(--background);
+    background-color: var(--main-text);
 }
