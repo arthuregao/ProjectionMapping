@@ -97,6 +97,7 @@ export default function Theatre(props) {
                                 key={index}
                             /> :
                             <AudiolessAvatar
+                                theatreKey={`person${key}`}
                                 glbEndpoint={`http://localhost:5000/avatars/${key}`}
                                 position={[index, 0, 0]}
                                 key={index}
