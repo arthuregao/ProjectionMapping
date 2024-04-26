@@ -7,7 +7,6 @@ import ThumbnailDisplay from "../../components/ThumbnailDisplay";
 export default function AudioUpload({avatars}) {
     const router = useRouter();
 
-    const [audioFile, setAudioFile] = useState(null);
     const [selectedAvatar, setSelectedAvatar] = useState('');
     const [uploading, setUploading] = useState(false)
     const [currentSession, setCurrentSession] = useState({});
@@ -39,38 +38,32 @@ export default function AudioUpload({avatars}) {
         });
     }, []);
 
-
-    const handleAudioFileChange = (event) => {
-        setAudioFile(event.target.files[0]); // Set the selected audio file
-    };
-
     const handleAvatarChange = (avatar) => {
         setSelectedAvatar(avatar); // Set the selected avatar
     };
 
     const handleSubmit = async (event) => {
-        setUploading(true)
-
+        setUploading(true);
         event.preventDefault();
-        if (audioFile && selectedAvatar) {
-            const formData = new FormData();
-            formData.append('audio_file', audioFile);
-            formData.append('avatar_name', selectedAvatar);
 
+        if (selectedAvatar) {
             try {
-                const response = await fetch('http://localhost:5000/attach-audio', {
-                    method: 'POST',
-                    body: formData,
-                });
+                const downloadUrl = `http://localhost:5000/avatars/${selectedAvatar}`;
 
-                const result = await response.json();
-                console.log(result); // Log or handle the response from the server
-                router.push('/');
+                // Create a temporary link to trigger the download
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.setAttribute('download', selectedAvatar); // Optionally force download
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                console.log("Download initiated for:", selectedAvatar);
             } catch (error) {
-                console.error('Error uploading the audio:', error);
+                console.error('Error downloading the avatar:', error);
             }
         } else {
-            console.log("No audio file selected or avatar chosen.");
+            console.log("No avatar chosen.");
         }
     };
 
@@ -89,7 +82,7 @@ export default function AudioUpload({avatars}) {
                 <div className="add-audio flex justify-center items-start p-9">
                     <img className='mr-7 mt-3 w-1/12 hover:cursor-pointer' src='/assets/Arrow_left.svg'alt='arrow icon' onClick={handleGoBack}/>
                     <div>
-                        <h1>Upload Audio for Avatar</h1>
+                        <h1>Download Avatar</h1>
                         <h2>Select Avatar</h2>
                         <div className='upload-col grid mt-7 gap-4'>
                             {Object.entries(currentSession['avatars']).map(([avatar, value], index) => (
@@ -102,26 +95,12 @@ export default function AudioUpload({avatars}) {
                                 ) : null
                             ))}
                         </div>
-                        <h2 className='mt-3'>Select Audio</h2>
-                        <input type="file" accept="audio/*" onChange={handleAudioFileChange} style={{display: 'none'}}/>
-                        <div className='flex items-center'>
-                            <button className="add-btn px-3 py-1 mt-3 mr-5"
-                                    onClick={() => document.querySelector('input[type="file"]').click()}>
-                                Select File
-                            </button>
-                            {audioFile && <h2>{audioFile.name}</h2>}
-                        </div>
+                        <p className={'mt-2'}>
+                            Note: To convert GLBs to 3d printable STL files, please use:
+                            <a className={'text-teal-300'} href="/"> This tool</a>
+                        </p>
 
-                        <button onClick={handleSubmit} className='add-btn px-3 py-1 mt-5'>Submit</button>
-
-
-                        {uploading === true ? <div className="flex mt-3 min-h-screen">
-                            <div className="text-xl font-semibold text-gray-100">
-                                Uploading...
-                                <span
-                                    className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>
-                            </div>
-                        </div> : <h2></h2>}
+                        <button onClick={handleSubmit} className='add-btn px-3 py-1 mt-5'>Download</button>
                     </div>
                 </div>
             </div>
@@ -129,8 +108,8 @@ export default function AudioUpload({avatars}) {
     } else {
         return (
             <div>
-                <h1>You must upload avatars before you can attach audio to them</h1>
-                <button onClick={handleGoBack} style={{marginTop: '20px'}}>Back</button>
+                {/*<h1>You must upload avatars before you can download an STL</h1>*/}
+                {/*<button onClick={handleGoBack} style={{marginTop: '20px'}}>Back</button>*/}
             </div>
 
         )

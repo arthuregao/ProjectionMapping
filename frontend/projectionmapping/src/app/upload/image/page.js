@@ -20,15 +20,13 @@ export default function ImageUpload() {
             formData.append('file', file); // Match the key 'file' with your server endpoint
 
             try {
-                const response = await fetch('http://localhost:5000/upload-image',
-                    {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                const result = await response.json().then(() => {
-                    router.push('/')
+                const response = await fetch('http://localhost:5000/upload-image', {
+                    method: 'POST',
+                    body: formData,
                 });
+
+                const result = await response.json();
+                router.push('/');
                 console.log(result); // Log or handle the response from the server
             } catch (error) {
                 console.error('Error uploading the image:', error);
@@ -38,20 +36,25 @@ export default function ImageUpload() {
         }
     };
 
-    const handleGoBack = async (event) => {
-        event.preventDefault()
-
-        router.push('/')
+    const handleGoBack = () => {
+        router.push('/');
     }
 
     return (
-        <div className='flex flex-col mt-9 items-center justify-center'>
-            <h1>Upload image</h1>
-            <div className='flex justify-start'>
-                <img src='/assets/Arrow_left.svg' alt='arrow icon' onClick={handleGoBack}/>
-                <form className='flex flex-col items-end upload-img' onSubmit={handleSubmit}>
-                    <input className='mb-4' type="file" onChange={handleFileChange}/>
-                    <button className='add-btn px-4 py-2' type="submit">Upload Image</button>
+        <div className="add-audio flex justify-center items-start p-9">
+            <img className="mr-7 mt-3 w-1/12 hover:cursor-pointer" src="/assets/Arrow_left.svg" alt="arrow icon" onClick={handleGoBack}/>
+            <div>
+                <h1 className="mb-5">Upload Image</h1>
+                <form className="flex flex-col items-start upload-img" onSubmit={handleSubmit}>
+                    <input className="mb-4" type="file" onChange={handleFileChange} style={{display: 'none'}}/>
+                    <div className='flex items-center'>
+                        <button className="add-btn px-3 py-1 mt-3 mr-5"
+                                onClick={() => document.querySelector('input[type="file"]').click()}>
+                            Select An Image
+                        </button>
+                        {file && <h2>{file.name}</h2>}
+                    </div>
+                    <button className="add-btn mt-5 px-4 py-2" type="submit">Upload Image</button>
                 </form>
             </div>
         </div>

@@ -13,10 +13,9 @@ import studio, {IExtension} from "@theatre/studio";
 import extension from "@theatre/r3f/dist/extension";
 
 // Local components
-import {Avatar} from './AvatarRenderer';
+import {Avatar} from './AvatarRendererAudio';
 import SheetImage from "./ImageRenderer";
-
-
+import {AudiolessAvatar} from "./AvatarRendererNoAudio";
 
 const demoSheet = getProject("Demo Project").sheet("Demo Sheet");
 
@@ -41,6 +40,17 @@ studio.extend(extension)
 studio.extend(addAssetsConfig)
 
 export default function Theatre(props) {
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            // toggle with space bar
+            if (event.code === "Space") {
+                demoSheet.sequence.play({iterationCount: 1}).then(
+                    () => console.log("playing..."))
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+
+    }, [])
 
     const [currentSession, setCurrentSession] = useState({});
 
@@ -71,23 +81,31 @@ export default function Theatre(props) {
 
         Object.entries(currentSession['avatars']).map(([key, value], index) => console.log(key, value));
         return (
-            <Canvas camera={{position: [5, 2, 10], fov: 30}} style={{height: "100vh", margin: "0"}}>
+            <Canvas camera={{position: [0, 2, 10], fov: 30}} style={{height: "100vh", margin: "0"}}>
                 <SheetProvider sheet={demoSheet}>
                     <OrbitControls/>
 
                     {Object.entries(currentSession['avatars']).map(([key, value], index) =>
-                        <Avatar
-                            theatreKey={`person${key}`}
-                            glbEndpoint={`http://localhost:5000/avatars/${key}`}
-                            audioEndpoint={`http://localhost:5000/audio/${value['audio']}`}
-                            audioJsonEndpoint={`http://localhost:5000/audio/${value['audio_json']}`}
-                            position={[index, 0, 0]}
-                            key={index}
-                        />
+
+                        value['audio'] ?
+                            <Avatar
+                                theatreKey={`person${key}`}
+                                glbEndpoint={`http://localhost:5000/avatars/${key}`}
+                                audioEndpoint={`http://localhost:5000/audio/${value['audio']}`}
+                                audioJsonEndpoint={`http://localhost:5000/audio/${value['audio_json']}`}
+                                position={[index, 0, 0]}
+                                key={index}
+                            /> :
+                            <AudiolessAvatar
+                                glbEndpoint={`http://localhost:5000/avatars/${key}`}
+                                position={[index, 0, 0]}
+                                key={index}
+                            />
                     )}
 
                     {currentSession['images'].map((value, index) =>
                         <SheetImage
+                            key={index}
                             imageEndpoint={`http://localhost:5000/images/${value}`}
                             index={index}
                         />

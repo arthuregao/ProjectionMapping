@@ -3,7 +3,6 @@
 import {useRouter} from 'next/navigation'
 import React, {useEffect, useState} from "react";
 
-import "./style.css";
 import AvatarDisplay from "./components/AvatarDisplay";
 import ThumbnailDisplay from "./components/ThumbnailDisplay";
 import ImageDisplay from "./components/ImageDisplay";
@@ -17,7 +16,7 @@ export default function Home() {
 
     const [activeTab, setActiveTab] = useState(0);
     const [currentSession, setCurrentSession] = useState({});
-    const tabList = ["Avatars", "Images", "Text", "Audio"]
+    const tabList = ["Avatars", "Images", "Audio", "Download GLB"]
 
     useEffect(() => {
         // Fetching assets from the server
@@ -47,9 +46,9 @@ export default function Home() {
         } else if (activeTab === 1) {
             router.push('/upload/image')
         } else if (activeTab === 2) {
-            router.push('/upload/text')
-        } else {
             router.push('/upload/audio')
+        } else {
+            router.push('/upload/convert')
         }
     }
 
@@ -67,7 +66,8 @@ export default function Home() {
                                 {Object.entries(currentSession['avatars']).map(([key, value], index) => (
                                     <React.Fragment key={index}>
                                         {/*<AvatarDisplay name={key}></AvatarDisplay>*/}
-                                        {value.thumbnail ? <ThumbnailDisplay name={value.thumbnail}></ThumbnailDisplay> : null}
+                                        {value.thumbnail ?
+                                            <ThumbnailDisplay name={value.thumbnail}></ThumbnailDisplay> : null}
                                     </React.Fragment>
                                 ))}
                             </div>
@@ -85,7 +85,8 @@ export default function Home() {
                     return (
                         <div>
                             <div className='sub-text'>
-                                Upload images here.</div>
+                                Upload images here.
+                            </div>
                             <div className='upload-col grid mt-7 gap-4'>
                                 {currentSession['images'].map((value, index) =>
                                     <ImageDisplay name={value} key={index}></ImageDisplay>
@@ -99,31 +100,13 @@ export default function Home() {
 
             case 2:
 
-                if (currentSession['text']) {
-                    console.log('attempting to display text')
-                    return (
-                        <div>
-                        <div className='sub-text'>
-                            Add text content.</div>
-                            <div className='upload-col grid mt-7 gap-4'>
-                                {currentSession['text'].map((value, index) =>
-                                    <TextDisplay name={value} key={index}/>
-                                )}
-                            </div>
-                        </div>
-                    )
-                } else {
-
-                return <div className='sub-text'>Add text content.</div>;
-                }
-            case 3:
-
                 if (currentSession['audio']) {
                     console.log('attempting to display audio')
                     return (
                         <div>
                             <div className='sub-text'>
-                                Upload Audio here.</div>
+                                Upload Audio here.
+                            </div>
                             <div className='upload-col grid mt-7 gap-4'>
                                 {currentSession['audio'].map((value, index) =>
                                     <AudioDisplay name={value} key={index}></AudioDisplay>
@@ -135,13 +118,22 @@ export default function Home() {
                     return <div className='sub-text'>Upload Audio here.</div>;
                 }
 
+            case 3:
+
+                // console.log('attempting to download glb')
+                //     return (
+                //         <div>
+                //             <div className='sub-text'>
+                //                 Convert avatar to 3D Model!
+                //             </div>
+                //         </div>
+                //     )
+
+                router.push('/download/avatar')
+
             default:
                 return <div className='sub-text'>Select a category to add content.</div>;
         }
-    }
-
-    function goToTheatre() {
-
     }
 
     const switchTheme = event => {
@@ -160,27 +152,32 @@ export default function Home() {
             <div className='theme-switch'>
                 <h2>Welcome!</h2>
                 <img alt='moon'
-                    src='/assets/moon.png'
-                    id='theme-icon'
-                    onClick={switchTheme}
+                     src='/assets/moon.png'
+                     id='theme-icon'
+                     onClick={switchTheme}
                 />
 
             </div>
             <h1 className="mb-10 title">Projection Mapping</h1>
-            <div className="flex tab-group">
-                {tabList.map((name, i) =>
-                    <button
-                        key={i}
-                        className={activeTab === i ? "active px-7 py-2" : "px-7 py-2 selection-tab-btn"}
-                        onClick={() => setActiveTab(i)}
-                    >
-                        {name}
-                    </button>
-                )}
+            <div className="flex justify-between tab-group">
+                <div className="flex space-x-4">
+                    {tabList.map((name, i) =>
+                        i !== 4 ?
+                            <button
+                                key={i}
+                                className={activeTab === i ? "active px-7 py-2" : "px-7 py-2 selection-tab-btn"}
+                                onClick={() => setActiveTab(i)}
+                            >
+                                {name}
+                            </button>
+                            :
+                            <div className={'w-0'} key={i}></div>
+                    )}
+                </div>
 
                 <button
                     key={4}
-                    className={activeTab === 4 ? "active px-7 py-2" : "px-7 py-2 selection-tab-btn"}
+                    className={activeTab === 4 ? "active px-7 py-2" : "px-7 py-2 add-btn"}
                     onClick={() => router.push('/theatre')}
                 >
                     Animate!
