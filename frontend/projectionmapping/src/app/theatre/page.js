@@ -1,7 +1,7 @@
 'use client'
 
 // React Core
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 
 // Third-party libraries for 3D and graphics
 import {Canvas} from '@react-three/fiber';
@@ -12,10 +12,12 @@ import {useVal} from "@theatre/react"
 import studio, {IExtension} from "@theatre/studio";
 import extension from "@theatre/r3f/dist/extension";
 
+
 // Local components
 import {Avatar} from './AvatarRendererAudio';
 import SheetImage from "./ImageRenderer";
 import {AudiolessAvatar} from "./AvatarRendererNoAudio";
+import  OrbitControlsWithLogging  from './OrbitControlsWithLogging';
 
 const demoSheet = getProject("Demo Project").sheet("Demo Sheet");
 
@@ -40,12 +42,14 @@ studio.extend(extension)
 studio.extend(addAssetsConfig)
 
 export default function Theatre(props) {
+
     useEffect(() => {
         const handleKeyDown = (event) => {
             // toggle with space bar
             if (event.code === "Space") {
                 demoSheet.sequence.play({iterationCount: 1}).then(
                     () => console.log("playing..."))
+                console.log( camera.position );
             }
         };
         window.addEventListener("keydown", handleKeyDown);
@@ -81,12 +85,11 @@ export default function Theatre(props) {
 
         Object.entries(currentSession['avatars']).map(([key, value], index) => console.log(key, value));
         return (
-            <Canvas camera={{position: [0, 2, 10], fov: 30}} style={{height: "100vh", margin: "0"}}>
+            <Canvas>
                 <SheetProvider sheet={demoSheet}>
-                    <OrbitControls/>
+                    <OrbitControlsWithLogging />
 
                     {Object.entries(currentSession['avatars']).map(([key, value], index) =>
-
                         value['audio'] ?
                             <Avatar
                                 theatreKey={`person${key}`}
