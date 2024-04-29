@@ -5,7 +5,7 @@ import React, {useEffect, useState, useRef} from 'react';
 
 // Third-party libraries for 3D and graphics
 import {Canvas} from '@react-three/fiber';
-import {OrbitControls, Stars, Environment} from "@react-three/drei";
+import {OrbitControls, Stars, Environment, PerspectiveCamera} from "@react-three/drei";
 import {editable as e, SheetProvider} from "@theatre/r3f";
 import {getProject} from "@theatre/core";
 import {useVal} from "@theatre/react"
@@ -80,14 +80,34 @@ export default function Theatre(props) {
         });
     }, [])
 
+    const controls = useRef();
+
+    useEffect(() => {
+        const handleCameraChange = () => {
+        console.log('Camera Position:', controls.current.object.position.toArray());
+        };
+
+        if (controls.current) {
+        controls.current.addEventListener('change', handleCameraChange);
+        }
+
+        return () => {
+        if (controls.current) {
+            controls.current.removeEventListener('change', handleCameraChange);
+        }
+        };
+    }, []);
+    const EditableCamera = e(PerspectiveCamera, 'perspectiveCamera');
+
     if (currentSession['avatars']) {
 
 
         Object.entries(currentSession['avatars']).map(([key, value], index) => console.log(key, value));
         return (
-            <Canvas>
+            <Canvas camera={{position: [0, 2, 10], fov: 30}} style={{height: "100vh", margin: "0"}}>
                 <SheetProvider sheet={demoSheet}>
                     <OrbitControlsWithLogging />
+                    <PerspectiveCamera theatreKey="Camera" makeDefault position={[5, 5, -5]} fov={75} />
 
                     {Object.entries(currentSession['avatars']).map(([key, value], index) =>
                         value['audio'] ?

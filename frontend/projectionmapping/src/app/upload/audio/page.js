@@ -17,6 +17,7 @@ export default function AudioUpload({avatars}) {
     }, [selectedAvatar]);
 
 
+
     useEffect(() => {
         // Fetching assets from the server
         console.log("fetching...")
@@ -75,54 +76,75 @@ export default function AudioUpload({avatars}) {
     };
 
     const handleGoBack = () => {
-        router.push('/');
+        router.push('/', 3);
     };
 
 
     if (currentSession['avatars'] && Object.keys(currentSession['avatars']).length) {
 
-        console.log(currentSession['avatars'])
+    console.log(currentSession['avatars'] )
         const avatars = currentSession['avatars']
 
         return (
-            <div >
-                <div className="add-audio flex justify-center items-start p-9">
-                    <img className='mr-7 mt-3 w-1/12 hover:cursor-pointer' src='/assets/Arrow_left.svg'alt='arrow icon' onClick={handleGoBack}/>
-                    <div>
-                        <h1>Upload Audio for Avatar</h1>
-                        <h2>Select Avatar</h2>
-                        <div className='upload-col grid mt-7 gap-4'>
-                            {Object.entries(currentSession['avatars']).map(([avatar, value], index) => (
-                                value?.thumbnail ? (
-                                    <div key={index}
-                                         onClick={() => handleAvatarChange(avatar)}
-                                         className={`cursor-pointer p-1 ${selectedAvatar === avatar ? 'border-4 border-fuchsia-500' : 'border border-transparent hover:border-slate-400 '}`}>
-                                        <ThumbnailDisplay name={value.thumbnail}/>
-                                    </div>
-                                ) : null
-                            ))}
-                        </div>
-                        <h2 className='mt-3'>Select Audio</h2>
-                        <input type="file" accept="audio/*" onChange={handleAudioFileChange} style={{display: 'none'}}/>
-                        <div className='flex items-center'>
-                            <button className="add-btn px-3 py-1 mt-3 mr-5"
-                                    onClick={() => document.querySelector('input[type="file"]').click()}>
-                                Select File
-                            </button>
-                            {audioFile && <h2>{audioFile.name}</h2>}
-                        </div>
-
-                        <button onClick={handleSubmit} className='add-btn px-3 py-1 mt-5'>Submit</button>
-
-
-                        {uploading === true ? <div className="flex mt-3 min-h-screen">
-                            <div className="text-xl font-semibold text-gray-100">
-                                Uploading...
-                                <span
-                                    className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>
-                            </div>
-                        </div> : <h2></h2>}
+            <div className="add-audio flex justify-center items-start p-9">
+                <img className='width-1/2' src='/assets/Arrow_left.svg' alt='arrow icon' onClick={handleGoBack}/>
+                <div>
+                    <h1>Upload Audio for Avatar</h1>
+                    <h2>Select Avatar</h2>
+                    <div className='upload-col grid mt-7 gap-4'>
+                        {Object.entries(currentSession['avatars']).map(([avatar, value], index) => (
+                            value?.thumbnail ? (
+                                <div key={index}
+                                     onClick={() => handleAvatarChange(avatar)}>
+                                    <ThumbnailDisplay name={value.thumbnail}/>
+                                </div>
+                            ) : null
+                        ))}
                     </div>
+                    <h2>Select Audio</h2>
+                    <input type="file" accept="audio/*" onChange={handleAudioFileChange} style={{display: 'none'}}/>
+                    <button className="add-btn px-3 py-1 mt-3"
+                            onClick={() => document.querySelector('input[type="file"]').click()}>
+                        Select File
+                    </button>
+                    {audioFile && <span>{audioFile.name}</span>}
+
+                    <button onClick={handleSubmit} className='add-btn px-3 py-1 mt-3'>Submit</button>
+
+
+                    {/*<form onSubmit={handleSubmit}>*/}
+                    {/*    <label>*/}
+                    {/*        Select Avatar:*/}
+                    {/*        <select*/}
+                    {/*            value={selectedAvatar} onChange={handleAvatarChange}*/}
+                    {/*            style={{display: 'block', margin: '10px 0'}}>*/}
+                    {/*            <option value="">Select an Avatar</option>*/}
+                    {/*            {Object.entries(currentSession['avatars']).map(([avatar, value], index) => (*/}
+                    {/*                <option key={avatar} value={avatar}>*/}
+                    {/*                    <React.Fragment key={index}>*/}
+                    {/*                        /!*<AvatarDisplay name={key}></AvatarDisplay>*!/*/}
+                    {/*                        {value.thumbnail ?*/}
+                    {/*                            <ThumbnailDisplay name={value.thumbnail}></ThumbnailDisplay> : null}*/}
+                    {/*                    </React.Fragment>*/}
+                    {/*                </option>*/}
+                    {/*            ))}*/}
+                    {/*        </select>*/}
+                    {/*    </label>*/}
+                    {/*    <label>*/}
+                    {/*        Select Audio File:*/}
+                    {/*        <input type="file" accept="audio/*" onChange={handleAudioFileChange}*/}
+                    {/*               style={{display: 'block', margin: '10px 0'}}/>*/}
+                    {/*    </label>*/}
+                    {/*    <button className={'add-btn px-3 py-1 mt-3'} type="submit">Attach Audio</button>*/}
+
+                    {/*    {uploading === true ? <div className="flex mt-3 min-h-screen">*/}
+                    {/*        <div className="text-xl font-semibold text-gray-100">*/}
+                    {/*            Uploading...*/}
+                    {/*            <span*/}
+                    {/*                className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>*/}
+                    {/*        </div>*/}
+                    {/*    </div> : <h2></h2>}*/}
+                    {/*</form>*/}
                 </div>
             </div>
         );
