@@ -16,7 +16,9 @@ Alternatively, you can install Github Desktop and clone the project via it's pro
 
 #### Step 2: Add Rhubarb Lipsync
 
-Rhubarb Lipsync is a code package that animates the mouths of avatars to match their speech from audio files. Download the .zip file [here]([https://link-url-here.org](https://github.com/DanielSWolf/rhubarb-lip-sync/releases)).
+Rhubarb Lipsync is a code package that animates the mouths of avatars to match their speech from audio files. Download the .zip file [here](https://github.com/DanielSWolf/rhubarb-lip-sync/releases).
+
+On the rightbar, find the compatible release to your machine and download it.
 
 Unzip, and place the folder at the same level as the root of the ProjectionMapping git directory as shown below.
 ```
