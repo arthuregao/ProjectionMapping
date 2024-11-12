@@ -31,7 +31,7 @@ function AvatarCreatorComponent() {
     const avatarUrlWithParams = `${event.data.url}?morphTargets=Oculus%20Visemes`;
     console.log(`Avatar URL is: ${avatarUrlWithParams}`);
 
-    fetch('http://localhost:5000/upload', {
+    fetch('http://localhost:5050/upload', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

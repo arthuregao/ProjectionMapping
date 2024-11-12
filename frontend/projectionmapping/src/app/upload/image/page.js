@@ -20,7 +20,7 @@ export default function ImageUpload() {
             formData.append('file', file); // Match the key 'file' with your server endpoint
 
             try {
-                const response = await fetch('http://localhost:5000/upload-image', {
+                const response = await fetch('http://localhost:5050/upload-image', {
                     method: 'POST',
                     body: formData,
                 });

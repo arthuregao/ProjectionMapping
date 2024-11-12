@@ -22,7 +22,7 @@ export default function AudioUpload({avatars}) {
         console.log("fetching...")
         const fetchCurrentAssets = async () => {
             try {
-                const response = await fetch('http://localhost:5000/get-session');
+                const response = await fetch('http://localhost:5050/get-session');
                 if (!response.ok) {
                     throw new Error('Failed to fetch assets');
                 }
@@ -58,7 +58,7 @@ export default function AudioUpload({avatars}) {
             formData.append('avatar_name', selectedAvatar);
 
             try {
-                const response = await fetch('http://localhost:5000/attach-audio', {
+                const response = await fetch('http://localhost:5050/attach-audio', {
                     method: 'POST',
                     body: formData,
                 });

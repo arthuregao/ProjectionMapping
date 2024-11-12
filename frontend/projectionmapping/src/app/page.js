@@ -23,7 +23,7 @@ export default function Home() {
         console.log("fetching...")
         const fetchCurrentAssets = async () => {
             try {
-                const response = await fetch('http://localhost:5000/get-session');
+                const response = await fetch('http://localhost:5050/get-session');
                 if (!response.ok) {
                     throw new Error('Failed to fetch assets');
                 }

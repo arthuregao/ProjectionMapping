@@ -17,7 +17,7 @@ function TextSubmitter() {
         formData.append('text', text);
 
         try {
-            const response = await fetch('http://localhost:5000/upload-text', {
+            const response = await fetch('http://localhost:5050/upload-text', {
                 method: 'POST',
                 body: formData,
             });

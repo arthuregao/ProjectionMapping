@@ -7,7 +7,7 @@ import React, {useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {OrbitControls, Stars, Environment} from "@react-three/drei";
 import {editable as e, SheetProvider} from "@theatre/r3f";
-import {getProject} from "@theatre/core";
+import "@theatre/core";
 import {useVal} from "@theatre/react"
 import studio, {IExtension} from "@theatre/studio";
 import extension from "@theatre/r3f/dist/extension";
@@ -16,6 +16,7 @@ import extension from "@theatre/r3f/dist/extension";
 import {Avatar} from './AvatarRendererAudio';
 import SheetImage from "./ImageRenderer";
 import {AudiolessAvatar} from "./AvatarRendererNoAudio";
+import {getProject} from "@theatre/core";
 
 const demoSheet = getProject("Demo Project").sheet("Demo Sheet");
 
@@ -59,7 +60,7 @@ export default function Theatre(props) {
         console.log("fetching...")
         const fetchCurrentAssets = async () => {
             try {
-                const response = await fetch('http://localhost:5000/get-session');
+                const response = await fetch('http://localhost:5050/get-session');
                 if (!response.ok) {
                     throw new Error('Failed to fetch assets');
                 }
@@ -90,15 +91,15 @@ export default function Theatre(props) {
                         value['audio'] ?
                             <Avatar
                                 theatreKey={`person${key}`}
-                                glbEndpoint={`http://localhost:5000/avatars/${key}`}
-                                audioEndpoint={`http://localhost:5000/audio/${value['audio']}`}
-                                audioJsonEndpoint={`http://localhost:5000/audio/${value['audio_json']}`}
+                                glbEndpoint={`http://localhost:5050/avatars/${key}`}
+                                audioEndpoint={`http://localhost:5050/audio/${value['audio']}`}
+                                audioJsonEndpoint={`http://localhost:5050/audio/${value['audio_json']}`}
                                 position={[index, 0, 0]}
                                 key={index}
                             /> :
                             <AudiolessAvatar
                                 theatreKey={`person${key}`}
-                                glbEndpoint={`http://localhost:5000/avatars/${key}`}
+                                glbEndpoint={`http://localhost:5050/avatars/${key}`}
                                 position={[index, 0, 0]}
                                 key={index}
                             />
@@ -107,7 +108,7 @@ export default function Theatre(props) {
                     {currentSession['images'].map((value, index) =>
                         <SheetImage
                             key={index}
-                            imageEndpoint={`http://localhost:5000/images/${value}`}
+                            imageEndpoint={`http://localhost:5050/images/${value}`}
                             index={index}
                         />
                     )}
@@ -118,13 +119,13 @@ export default function Theatre(props) {
         );
     } else {
         return (
-            <div className="flex flex-col justify-start items-center min-h-screen">
-                <div className="text-xl font-semibold text-gray-100">
-                    Loading...
-                    <span className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>
-                </div>
-            </div>
-
+            // <div className="flex flex-col justify-start items-center min-h-screen">
+            //     <div className="text-xl font-semibold text-gray-100">
+            //         Loading...
+            //         <span className="animate-ping absolute h-3 w-3 rounded-full bg-blue-100 opacity-75"></span>
+            //     </div>
+            // </div>
+            <h1></h1>
         )
     }
 }

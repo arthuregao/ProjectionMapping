@@ -9,7 +9,7 @@ from datetime import datetime
 from pydub import AudioSegment
 
 from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 BASE_SESSION_STRUCTURE = {
@@ -60,11 +60,36 @@ def create_directory_structure(base_path='session'):
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+# cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],  # Add your frontend origins
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+        "supports_credentials": True,
+        "max_age": 3600
+    }
+})
+
+# Add CORS headers to all responses
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
 
 with app.app_context():
     create_directory_structure()
 
+
+@app.route('/test')
+def test():
+    print("i am running")
+
+    return "<H1>Projection Mapping Server Backend. Test Page </H1>"
 
 @app.route('/reset')
 def reset_app():
@@ -88,7 +113,6 @@ def reset_app():
 
 
 @app.route('/upload', methods=['POST'])
-@cross_origin()
 def upload():
     print("There was a file")
     if request.is_json:
@@ -161,7 +185,6 @@ def generate_avatar_thumbnail(avatarID):
 
 
 @app.route('/upload-image', methods=['POST'])
-@cross_origin()
 def upload_image_assets():
     if 'file' not in request.files:
         return jsonify({"message": "No file part"}), 400
@@ -197,25 +220,21 @@ def allowed_file(filename):
 
 
 @app.route('/images/<filename>')
-@cross_origin()
 def uploaded_file(filename):
     return send_from_directory('session/images', filename)
 
 
 @app.route('/avatars/<filename>')
-@cross_origin()
 def send_uploaded_glb(filename):
     return send_from_directory('session/avatars', filename)
 
 
 @app.route('/audio/<filename>')
-@cross_origin()
 def send_uploaded_audio(filename):
     return send_from_directory('session/audio', filename)
 
 
 @app.route('/get-session', methods=['GET'])
-@cross_origin()
 def get_session_asset_names():
     try:
         # Open the session.json file in read mode
@@ -232,7 +251,6 @@ def get_session_asset_names():
 
 
 @app.route('/attach-audio', methods=['POST'])
-@cross_origin()
 def attach_audio():
     avatar_name = request.form.get('avatar_name')
     audio_file = request.files.get('audio_file')
@@ -311,7 +329,6 @@ def sanitize_text(text):
 
 
 @app.route('/upload-text', methods=['POST'])
-@cross_origin()
 def upload_text():
     if 'text' not in request.form:
         return jsonify({'error': 'No text data provided'}), 400
@@ -337,8 +354,5 @@ def upload_text():
     return jsonify({'message': 'Text uploaded and stored successfully'}), 200
 
 
-
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5050)

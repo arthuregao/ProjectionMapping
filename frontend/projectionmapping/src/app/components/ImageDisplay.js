@@ -11,7 +11,7 @@ function ImageGallery(props) {
         async function fetchImages() {
             setLoading(true);
             setError(null);
-            const fetchUrl = `http://localhost:5000/images/${props.name}`;
+            const fetchUrl = `http://localhost:5050/images/${props.name}`;
             try {
                 const response = await fetch(fetchUrl, { signal: abortController.signal });
                 if (!response.ok) {
