@@ -97,7 +97,7 @@ export default function AudioUpload({avatars}) {
                         </div>
                         <p className={'mt-2'}>
                             Note: To convert GLBs to 3d printable STL files, please use:
-                            <a className={'text-teal-300'} href="/"> This tool</a>
+                            <a className={'text-teal-300'}   target="_blank" href="https://imagetostl.com/convert/file/glb/to/stl"> This tool</a>
                         </p>
 
                         <button onClick={handleSubmit} className='add-btn px-3 py-1 mt-5'>Download</button>
